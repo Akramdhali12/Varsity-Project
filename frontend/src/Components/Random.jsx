@@ -2,7 +2,7 @@ import React from 'react'
 
 const Random = () => {
   return (
-    <div>Random</div>
+    <div className='min-h-[1600px]'>Random</div>
   )
 }
 

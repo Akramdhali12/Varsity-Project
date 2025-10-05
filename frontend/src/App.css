@@ -2,3 +2,21 @@
     font-family: 'Merriweather', sans-serif;
     font-style: semibold;
 }
+
+
+::-webkit-scrollbar-track
+{
+	border: 1px solid black;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #f8f9f8;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #4d893f;	
+}

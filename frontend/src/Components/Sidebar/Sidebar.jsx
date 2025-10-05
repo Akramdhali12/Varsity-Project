@@ -31,18 +31,23 @@ const links = [
 
 const Sidebar = () => {
   return (
-    <div className="bg-red-200 w-64 flex flex-col gap-7 items-center py-3">
-      <div className="text-red-600 flex gap-1 items-center">
-        <IconHeartbeat size={35} stroke={2.5} />
-        <span className="font-heading text-3xl">Pulse</span>
-      </div>
+    <div className="flex">
+    <div className="w-64">
 
+    </div>
+    
+    <div className="bg-gray-800 h-screen hide-scrollbar overflow-y-auto w-64 fixed flex flex-col gap-7 items-center">
+      <div className="fixed z-[500] py-3 bg-gray-800 text-red-600 flex gap-1 items-center">
+        <IconHeartbeat size={35} stroke={2.5} />
+        <span className="font-heading text-green-400 text-3xl">Pulse</span>
+      </div>
+    <div className="flex flex-col mt-20 gap-8 items-center">
       <div className="flex flex-col gap-1 items-center">
         <div className="p-1 bg-white rounded-full shadow-lg">
           <Avatar variant="filled" src="avatar.png" size="lg" alt="it's me" />
         </div>
-        <span className="font-medium">Akram</span>
-        <Text size="xs" c="dimmed">
+        <span className="font-medium text-white">Akram</span>
+        <Text size="xs" c="dimmed" className="text-white">
           Admin
         </Text>
       </div>
@@ -52,13 +57,15 @@ const Sidebar = () => {
             key={link.name} className="w-full">
             <a
               href={link.url}
-              className="flex items-center gap-3 text-gray-700 hover:bg-green-300 px-4 py-2 rounded-md w-48" >
+              className="group flex items-center gap-3 text-white hover:bg-green-300 hover:text-black px-4 py-2 rounded-md w-48" >
               {link.icon}
-              <span className="font-medium">{link.name}</span>
+              <span className="font-medium text-white group-hover:text-black">{link.name}</span>
             </a>
           </div>
         ))}
       </div>
+    </div>
+    </div>
     </div>
   );
 };
