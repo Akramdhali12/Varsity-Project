@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "GatewayMsApplication",
+            "request": "launch",
+            "mainClass": "com.hms.gateway.GatewayMsApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-HmsApplication<HMS>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hms.HMS.HmsApplication",
+            "projectName": "HMS",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
