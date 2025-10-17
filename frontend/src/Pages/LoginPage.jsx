@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {jwtDecode} from "jwt-decode";
 import { setJwt } from "../Slices/JwtSlice";
+import { setUser } from "../Slices/UserSlice";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -28,18 +29,14 @@ const LoginPage = () => {
   });
 
   const handleSubmit = (values) => {
-    // if(values.email === "" || values.password === ""){
-    //   setLoading(false);
-    // };
-    // console.log(values);
-    // navigate("/dashboard");
-    // setLoading(true);
+    setLoading(true);
     loginUser(values)
       .then((_data) => {
         console.log(jwtDecode(_data));
         console.log("Login successful:", _data);
         successNotification("Login successful!");
         dispatch(setJwt(_data));
+        dispatch(setUser(jwtDecode(_data)));
         // navigate to dashboard or home page
         navigate("/dashboard");
       })
@@ -48,6 +45,7 @@ const LoginPage = () => {
         errorNotification(error.response?.data?.message || error.message || "Login failed. Please try again."); 
       }).finally(() => {
         form.reset();
+        setLoading(false);
       });
   };
 

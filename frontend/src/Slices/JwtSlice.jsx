@@ -11,7 +11,7 @@ const jwtSlice = createSlice({
     },
     removeJwt:(state) => {
       localStorage.removeItem("Token");
-      state = null;
+      state = '';
       return state;
     }
   }

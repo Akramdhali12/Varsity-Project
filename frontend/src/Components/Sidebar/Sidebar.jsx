@@ -10,6 +10,7 @@ import {
 } from "@tabler/icons-react";
 import "../../App.css";
 import { Avatar, Text } from "@mantine/core";
+import { useSelector } from "react-redux";
 
 const links = [
   {
@@ -30,6 +31,7 @@ const links = [
 ];
 
 const Sidebar = () => {
+  const user=useSelector((state)=>state.user);
   return (
     <div className="flex">
     <div className="w-64">
@@ -46,9 +48,9 @@ const Sidebar = () => {
         <div className="p-1 bg-white rounded-full shadow-lg">
           <Avatar variant="filled" src="avatar.png" size="lg" alt="it's me" />
         </div>
-        <span className="font-medium text-white">Akram</span>
+        <span className="font-medium text-white">{user.name}</span>
         <Text size="xs" c="dimmed" className="text-white">
-          Admin
+          {user.role}
         </Text>
       </div>
       <div>
