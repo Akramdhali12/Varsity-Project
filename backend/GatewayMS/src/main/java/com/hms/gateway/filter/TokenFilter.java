@@ -1,6 +1,6 @@
 package com.hms.gateway.filter;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -29,10 +29,10 @@ public class TokenFilter extends AbstractGatewayFilterFactory<TokenFilter.Config
                 "SECRET")).build());
             }
             HttpHeaders headers = exchange.getRequest().getHeaders();
-            if(!headers.containsKey("HttpHeaders.AUTHORIZATION")){
+            if(!headers.containsKey(HttpHeaders.AUTHORIZATION)){
                 throw new RuntimeException("Missing authorization header");
             }
-            String authHeader = headers.getFirst("HttpHeaders.AUTHORIZATION");
+            String authHeader = headers.getFirst(HttpHeaders.AUTHORIZATION);
             if(authHeader == null || !authHeader.startsWith("Bearer ")){
                 throw new RuntimeException("Missing or invalid authorization header");
             }

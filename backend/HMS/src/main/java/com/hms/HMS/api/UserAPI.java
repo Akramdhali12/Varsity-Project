@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("user")
+@RequestMapping("/user")
 @Validated
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")  
 public class UserAPI {
     @Autowired
     private UserService userService;

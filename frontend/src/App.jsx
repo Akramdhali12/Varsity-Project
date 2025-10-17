@@ -1,8 +1,12 @@
 
 import './App.css'
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 import { Button, createTheme, MantineProvider } from '@mantine/core';
 import AppRoutes from './Routes/AppRoutes';
+import { Provider } from 'react-redux';
+import { Notifications } from '@mantine/notifications';
+import store from './Store';
 
 const theme = createTheme({
   focusRing: 'never',
@@ -19,9 +23,12 @@ const theme = createTheme({
 });
 function App() {
   return (
+    <Provider store={store}>
       <MantineProvider theme={theme}>
+        <Notifications position='top-center'/>
         <AppRoutes />
       </MantineProvider>
+    </Provider>
   )
 }
 

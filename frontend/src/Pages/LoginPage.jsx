@@ -2,9 +2,18 @@ import { Button, PasswordInput, TextInput } from "@mantine/core";
 import "../App.css";
 import { IconHeartbeat } from "@tabler/icons-react";
 import { useForm } from '@mantine/form';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../Service/UserService";
+import { errorNotification, successNotification } from "../Utility/NotificationUtil";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import {jwtDecode} from "jwt-decode";
+import { setJwt } from "../Slices/JwtSlice";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -19,7 +28,27 @@ const LoginPage = () => {
   });
 
   const handleSubmit = (values) => {
-    console.log(values);
+    // if(values.email === "" || values.password === ""){
+    //   setLoading(false);
+    // };
+    // console.log(values);
+    // navigate("/dashboard");
+    // setLoading(true);
+    loginUser(values)
+      .then((_data) => {
+        console.log(jwtDecode(_data));
+        console.log("Login successful:", _data);
+        successNotification("Login successful!");
+        dispatch(setJwt(_data));
+        // navigate to dashboard or home page
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        errorNotification(error.response?.data?.message || error.message || "Login failed. Please try again."); 
+      }).finally(() => {
+        form.reset();
+      });
   };
 
   return (
@@ -41,7 +70,7 @@ const LoginPage = () => {
         <div className="self-center font-medium font-heading text-xl">Login</div>
         <TextInput {...form.getInputProps('email')} variant="filled" size="md" radius="md" placeholder="Email" />
         <PasswordInput {...form.getInputProps('password')} variant="filled" size="md" radius="md" placeholder="Password" />
-        <Button type="submit">Login</Button>
+        <Button loading={loading} type="submit">Login</Button>
         <div>Don't have an account? <Link to="/register" className="text-red-500 hover:underline">Register</Link></div>
       </form>
     </div>

@@ -16,6 +16,16 @@
             "projectName": "HMS",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayMsApplication<GatewayMS>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hms.gateway.GatewayMsApplication",
+            "projectName": "GatewayMS",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
