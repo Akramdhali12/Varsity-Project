@@ -24,8 +24,9 @@ public class UserDTO {
              message = "Password must be at least 8 characters long, contain at least one digit, one lowercase letter, one uppercase letter, one special character and have no whitespace")
     private String password;
     private Roles role;
+    private Long profileId;
 
     public User toEntity(){
-        return new User(this.id, this.name, this.email, this.password, this.role);
+        return new User(this.id, this.name, this.email, this.password, this.role, this.profileId);
     }
 }
