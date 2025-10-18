@@ -6,6 +6,7 @@ import {
   IconPill,
   IconSettings,
   IconStethoscope,
+  IconUser,
   IconUsers,
 } from "@tabler/icons-react";
 import "../../../app.css"
@@ -16,18 +17,16 @@ const links = [
   {
     name: "Dashboard",
     icon: <IconLayoutGrid stroke={1.5} />,
-    url: "/dashboard",
+    url: "/doctor/dashboard",
   },
-  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/patient" },
-  { name: "Doctors", icon: <IconStethoscope stroke={1.5} />, url: "/doctors" },
+  { name: "Profile", icon: <IconUser stroke={1.5} />, url: "/doctor/profile" },
+  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/doctor/patient" },
   {
     name: "Appointments",
     icon: <IconCalendarCheck stroke={1.5} />,
-    url: "/appointments",
+    url: "/doctor/appointments",
   },
-  { name: "pharmacy", icon: <IconPill stroke={1.5} />, url: "/pharmacy" },
-  { name: "Staffs", icon: <IconUsers stroke={1.5} />, url: "/staffs" },
-  { name: "Settings", icon: <IconSettings stroke={1.5} />, url: "/settings" },
+  { name: "pharmacy", icon: <IconPill stroke={1.5} />, url: "/doctor/pharmacy" },
 ];
 
 const Sidebar = () => {

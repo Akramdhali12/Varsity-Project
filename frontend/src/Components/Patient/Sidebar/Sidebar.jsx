@@ -1,13 +1,8 @@
 import {
-  IconBed,
   IconCalendarCheck,
   IconHeartbeat,
   IconLayoutGrid,
-  IconPill,
-  IconSettings,
-  IconStethoscope,
   IconUser,
-  IconUsers,
 } from "@tabler/icons-react";
 import "../../../App.css";
 import { Avatar, Text } from "@mantine/core";

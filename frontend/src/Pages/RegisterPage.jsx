@@ -88,14 +88,14 @@ const RegisterPage = () => {
               Register
             </div>
             <SegmentedControl
-              {...form.getInputProps("type")}
+              {...form.getInputProps("role")}
               color="pink"
               fullWidth
               size="md"
               radius="md"
               data={[
                 { label: "Patient", value: "PATIENT" },
-                { label: "Doctor", value: "Doctor" },
+                { label: "Doctor", value: "DOCTOR" },
                 { label: "admin", value: "ADMIN" },
               ]}
             />

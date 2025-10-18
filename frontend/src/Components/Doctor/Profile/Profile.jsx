@@ -3,17 +3,19 @@ import { DateInput } from '@mantine/dates';
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { IconEdit } from "@tabler/icons-react";
-import { bloodGroups } from "../../../Data/DropDownData";
+import { doctorDepartments, doctorSpecializations } from "../../../Data/DropDownData";
 import { useDisclosure } from "@mantine/hooks";
 
-const patient = {
+const doctor = {
+  name: "Dr. Akram Hossain",
+  email: "akram.hossain@example.com",
   dob: "1998-04-25",
   phone: "+8801789123456",
   address: "Dhaka, Bangladesh",
-  idCardNo: "123456789",
-  bloodGroup: "O+",
-  allergies: "Pollen",
-  chronicDisease: "None",
+  licenseNo: "DOC-2025-12345",
+  specialization: "Cardiologist",
+  department: "Cardiology",
+  totalExp: 5
 };
 
 const Profile = () => {
@@ -59,14 +61,14 @@ const Profile = () => {
               {editMode?<Table.Td className="px-4">
                 <DateInput placeholder="Date input"/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.dob}</Table.Td>}
+              <Table.Td className="px-4">{doctor.dob}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Phone</Table.Td>
               {editMode?<Table.Td className="px-4">
                 <NumberInput maxLength={11} clampBehavior="strict" placeholder="Phone Number" hideControls/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.phone}</Table.Td>}
+              <Table.Td className="px-4">{doctor.phone}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Address</Table.Td>
@@ -75,35 +77,35 @@ const Profile = () => {
                   placeholder="Address"
                 />
               </Table.Td>:
-              <Table.Td className="px-4">{patient.address}</Table.Td>}
+              <Table.Td className="px-4">{doctor.address}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
-              <Table.Td className="px-4">ID Card No</Table.Td>
+              <Table.Td className="px-4">License No</Table.Td>
               {editMode?<Table.Td className="px-4">
                 <NumberInput maxLength={12} clampBehavior="strict" placeholder="IdCard Number" hideControls/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.idCardNo}</Table.Td>}
+              <Table.Td className="px-4">{doctor.licenseNo}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
-              <Table.Td className="px-4">Blood Group</Table.Td>
+              <Table.Td className="px-4">Specialization</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <Select data={bloodGroups} placeholder="Blood Group"/>
+                <Select data={doctorSpecializations} placeholder="Specialization"/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.bloodGroup}</Table.Td>}
+              <Table.Td className="px-4">{doctor.specialization}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
-              <Table.Td className="px-4">Allergies</Table.Td>
+              <Table.Td className="px-4">Department</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <TagsInput placeholder="Allergies seperated by comma" />
+                <Select data={doctorDepartments} placeholder="Department"/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.allergies}</Table.Td>}
+              <Table.Td className="px-4">{doctor.department}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
-              <Table.Td className="px-4">Chronic Disease</Table.Td>
+              <Table.Td className="px-4">Total Experience</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <TagsInput placeholder="Chronic disease seperated by comma" />
+                <NumberInput maxLength={2} max={50} clampBehavior="strict" placeholder="Total Experience" hideControls/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.chronicDisease}</Table.Td>}
+              <Table.Td className="px-4">{doctor.totalExp} years</Table.Td>}
             </Table.Tr>
           </Table.Tbody>
         </Table>
