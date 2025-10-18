@@ -8,7 +8,7 @@ import {
   IconStethoscope,
   IconUsers,
 } from "@tabler/icons-react";
-import "../../App.css";
+import "../../../app.css"
 import { Avatar, Text } from "@mantine/core";
 import { useSelector } from "react-redux";
 
@@ -18,7 +18,7 @@ const links = [
     icon: <IconLayoutGrid stroke={1.5} />,
     url: "/dashboard",
   },
-  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/patients" },
+  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/patient" },
   { name: "Doctors", icon: <IconStethoscope stroke={1.5} />, url: "/doctors" },
   {
     name: "Appointments",
@@ -46,7 +46,7 @@ const Sidebar = () => {
     <div className="flex flex-col mt-20 gap-8 items-center">
       <div className="flex flex-col gap-1 items-center">
         <div className="p-1 bg-white rounded-full shadow-lg">
-          <Avatar variant="filled" src="avatar.png" size="lg" alt="it's me" />
+          <Avatar variant="filled" src="/profile.png" size="lg" alt="it's me" />
         </div>
         <span className="font-medium text-white">{user.name}</span>
         <Text size="xs" c="dimmed" className="text-white">

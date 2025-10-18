@@ -32,13 +32,9 @@ const LoginPage = () => {
     setLoading(true);
     loginUser(values)
       .then((_data) => {
-        console.log(jwtDecode(_data));
-        console.log("Login successful:", _data);
         successNotification("Login successful!");
         dispatch(setJwt(_data));
         dispatch(setUser(jwtDecode(_data)));
-        // navigate to dashboard or home page
-        navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Login failed:", error);
