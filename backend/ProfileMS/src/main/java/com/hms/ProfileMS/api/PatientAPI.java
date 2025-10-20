@@ -14,6 +14,7 @@ import com.hms.ProfileMS.dto.PatientDTO;
 import com.hms.ProfileMS.exception.HmsException;
 import com.hms.ProfileMS.service.PatientService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -33,6 +34,11 @@ public class PatientAPI {
     @GetMapping("/get/{id}")
     public ResponseEntity<PatientDTO> getPatientById(@PathVariable Long id) throws HmsException{
         return new ResponseEntity<>(patientService.getPatientById(id),HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) throws HmsException {
+        return new ResponseEntity<>(patientService.updatePatient(patientDTO),HttpStatus.OK);
     }
     
 }

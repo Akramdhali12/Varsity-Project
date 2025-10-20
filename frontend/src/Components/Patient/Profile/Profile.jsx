@@ -1,27 +1,73 @@
 import { Avatar, Button, Divider, Modal, NumberInput, Select, Table, TagsInput, TextInput } from "@mantine/core";
 import { DateInput } from '@mantine/dates';
-import React, { useState } from "react";
+import { useForm } from '@mantine/form';
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { IconEdit } from "@tabler/icons-react";
 import { bloodGroups } from "../../../Data/DropDownData";
 import { useDisclosure } from "@mantine/hooks";
-
-const patient = {
-  dob: "1998-04-25",
-  phone: "+8801789123456",
-  address: "Dhaka, Bangladesh",
-  idCardNo: "123456789",
-  bloodGroup: "O+",
-  allergies: "Pollen",
-  chronicDisease: "None",
-};
+import { getPatient, updatePatient } from "../../../Service/PatientProfileService"; 
+import { formatDate } from "../../../Utility/DateUtility";
+import {errorNotification} from "../../../Utility/NotificationUtil"
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
   const [opened, {open,close}] = useDisclosure(false);
   const [editMode, setEdit] = useState(false);
+  const [profile, setProfile] = useState({
+  // dob: "",
+  // phone: "",
+  // address: "",
+  // idCardNo: "",
+  // bloodGroup: "",
+  // allergies: [],
+  // chronicDisease: [],
+  });
+
+  useEffect(()=>{
+    console.log(user);
+    getPatient(user.profileId).then((data)=>{
+      setProfile(data);
+    }).catch((error)=>{
+      console.log(error);
+      
+    })
+  },[])
+
+  const form = useForm({
+    initialValues: {
+      dob:profile.dob,
+      phone:profile.phone,
+      address:profile.address,
+      idCardNo:profile.idCardNo,
+      bloodGroup:profile.bloodGroup,
+      allergies:profile.allergies,
+      chronicDisease:profile.chronicDisease,
+    },
+
+    validate: {
+      dob:(value)=>!value?'Date of Birth is required':undefined,
+      phone:(value)=>!value?'Phone number is required':undefined,
+      address:(value)=>!value?'Address is required':undefined,
+      idCardNo:(value)=>!value?'IdCard Number is required':undefined,
+    },
+  });
+
+  const handleSubmit = (values)=>{
+    updatePatient({...profile,...values}).then((data)=>{
+      setProfile(data);
+      setEdit(false);
+    }).catch((error)=>{
+      const msg =
+    error.response?.data?.errorMessage || error.message || "Something went wrong!";
+  errorNotification(msg);
+      
+    })
+    
+  }
+
   return (
-    <div className="p-10">
+    <form onSubmit={form.onSubmit(handleSubmit)} className="p-10">
       <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">
           <div className="flex flex-col items-center gap-3">
@@ -40,10 +86,10 @@ const Profile = () => {
             <div className="text-xl text-neutral-700">{user.email}</div>
           </div>
         </div>
-        {!editMode? <Button onClick={() => setEdit(true)} variant="filled" leftSection={<IconEdit />}>
+        {!editMode? <Button type="button" onClick={() => setEdit(true)} variant="filled" leftSection={<IconEdit />}>
           Edit
         </Button>:
-        <Button onClick={() => setEdit(false)} variant="filled">
+        <Button type="submit" variant="filled">
           submit
         </Button>}
       </div>
@@ -57,53 +103,53 @@ const Profile = () => {
             <Table.Tr>
               <Table.Td className="px-4">Date of Birth</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <DateInput placeholder="Date input"/>
+                <DateInput {...form.getInputProps("dob")} placeholder="Date input"/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.dob}</Table.Td>}
+              <Table.Td className="px-4">{formatDate(profile.dob)?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Phone</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <NumberInput maxLength={11} clampBehavior="strict" placeholder="Phone Number" hideControls/>
+                <NumberInput {...form.getInputProps("phone")} maxLength={11} clampBehavior="strict" placeholder="Phone Number" hideControls/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.phone}</Table.Td>}
+              <Table.Td className="px-4">{profile.phone?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Address</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <TextInput
+                <TextInput {...form.getInputProps("address")}
                   placeholder="Address"
                 />
               </Table.Td>:
-              <Table.Td className="px-4">{patient.address}</Table.Td>}
+              <Table.Td className="px-4">{profile.address?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">ID Card No</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <NumberInput maxLength={12} clampBehavior="strict" placeholder="IdCard Number" hideControls/>
+                <NumberInput {...form.getInputProps("idCardNo")} maxLength={12} clampBehavior="strict" placeholder="IdCard Number" hideControls/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.idCardNo}</Table.Td>}
+              <Table.Td className="px-4">{profile.idCardNo?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Blood Group</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <Select data={bloodGroups} placeholder="Blood Group"/>
+                <Select {...form.getInputProps("bloodGroup")} data={bloodGroups} placeholder="Blood Group"/>
               </Table.Td>:
-              <Table.Td className="px-4">{patient.bloodGroup}</Table.Td>}
+              <Table.Td className="px-4">{profile.bloodGroup?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Allergies</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <TagsInput placeholder="Allergies seperated by comma" />
+                <TagsInput {...form.getInputProps("allergies")} placeholder="Allergies seperated by comma" />
               </Table.Td>:
-              <Table.Td className="px-4">{patient.allergies}</Table.Td>}
+              <Table.Td className="px-4">{profile.allergies?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Chronic Disease</Table.Td>
               {editMode?<Table.Td className="px-4">
-                <TagsInput placeholder="Chronic disease seperated by comma" />
+                <TagsInput {...form.getInputProps("chronicDisease")} placeholder="Chronic disease seperated by comma" />
               </Table.Td>:
-              <Table.Td className="px-4">{patient.chronicDisease}</Table.Td>}
+              <Table.Td className="px-4">{profile.chronicDisease ?? '-'}</Table.Td>}
             </Table.Tr>
           </Table.Tbody>
         </Table>
@@ -111,7 +157,7 @@ const Profile = () => {
       <Modal centered opened={opened} onClose={close} title={<span className="text-xl font-medium">Upload Profile Picture</span>}>
         {/* Modal content */}
       </Modal>
-    </div>
+    </form>
   );
 };
 

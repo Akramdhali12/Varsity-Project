@@ -20,7 +20,7 @@ public class MyUserDetailsService implements UserDetailsService {
         try {
             UserDTO user = userService.getUser(email);
             return new CustomUserDetails(user.getId(), user.getEmail(), user.getEmail(),
-                    user.getPassword(), user.getRole(), user.getName(), null);
+                    user.getPassword(), user.getRole(), user.getName(), user.getProfileId(), null);
         } catch (Exception e) {
             e.printStackTrace();
         }
