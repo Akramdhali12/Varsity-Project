@@ -8,26 +8,20 @@ import { bloodGroups } from "../../../Data/DropDownData";
 import { useDisclosure } from "@mantine/hooks";
 import { getPatient, updatePatient } from "../../../Service/PatientProfileService"; 
 import { formatDate } from "../../../Utility/DateUtility";
-import {errorNotification} from "../../../Utility/NotificationUtil"
+import {errorNotification, successNotification} from "../../../Utility/NotificationUtil"
+import { arrayToCSV } from "../../../Utility/OtherUtility";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
   const [opened, {open,close}] = useDisclosure(false);
   const [editMode, setEdit] = useState(false);
-  const [profile, setProfile] = useState({
-  // dob: "",
-  // phone: "",
-  // address: "",
-  // idCardNo: "",
-  // bloodGroup: "",
-  // allergies: [],
-  // chronicDisease: [],
-  });
+  const [profile, setProfile] = useState({});
 
   useEffect(()=>{
-    console.log(user);
     getPatient(user.profileId).then((data)=>{
-      setProfile(data);
+      setProfile({...data,allergies:data.allergies?(JSON.parse(data.allergies)): null,
+        chronicDisease:data.chronicDisease?(JSON.parse(data.chronicDisease)): null
+      });
     }).catch((error)=>{
       console.log(error);
       
@@ -36,13 +30,13 @@ const Profile = () => {
 
   const form = useForm({
     initialValues: {
-      dob:profile.dob,
-      phone:profile.phone,
-      address:profile.address,
-      idCardNo:profile.idCardNo,
-      bloodGroup:profile.bloodGroup,
-      allergies:profile.allergies,
-      chronicDisease:profile.chronicDisease,
+      dob:'',
+      phone:'',
+      address:'',
+      idCardNo:'',
+      bloodGroup:'',
+      allergies:[],
+      chronicDisease:[],
     },
 
     validate: {
@@ -52,10 +46,21 @@ const Profile = () => {
       idCardNo:(value)=>!value?'IdCard Number is required':undefined,
     },
   });
-
-  const handleSubmit = (values)=>{
-    updatePatient({...profile,...values}).then((data)=>{
-      setProfile(data);
+  const handleEdit=()=>{
+    form.setValues({...profile,dob:profile.dob?new Date(profile.dob):undefined,
+      chronicDisease:profile.chronicDisease??[],allergies:profile.allergies??[]
+    });
+    setEdit(true);
+  }
+  const handleSubmit = (e)=>{
+    let values = form.getValues();
+    form.validate();
+    if(!form.isValid())return;
+    updatePatient({...profile,...values, allergies:values.allergies?JSON.stringify(values.allergies):null,
+      chronicDisease:values.chronicDisease?JSON.stringify(values.chronicDisease):null
+    }).then((data)=>{
+      successNotification("Profile updated successfully");
+      setProfile({...profile, ...values});
       setEdit(false);
     }).catch((error)=>{
       const msg =
@@ -67,7 +72,7 @@ const Profile = () => {
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} className="p-10">
+    <div className="p-10">
       <div className="flex justify-between items-center">
         <div className="flex gap-5 items-center">
           <div className="flex flex-col items-center gap-3">
@@ -86,10 +91,10 @@ const Profile = () => {
             <div className="text-xl text-neutral-700">{user.email}</div>
           </div>
         </div>
-        {!editMode? <Button type="button" onClick={() => setEdit(true)} variant="filled" leftSection={<IconEdit />}>
+        {!editMode? <Button type="button" onClick={handleEdit} variant="filled" leftSection={<IconEdit />}>
           Edit
         </Button>:
-        <Button type="submit" variant="filled">
+        <Button type="submit" onClick={handleSubmit} variant="filled">
           submit
         </Button>}
       </div>
@@ -99,7 +104,7 @@ const Profile = () => {
           Personal Information
         </div>
         <Table striped stripedColor="red.1" withRowBorders={false}>
-          <Table.Tbody>
+          <Table.Tbody className="[&>tr]:!mb-3 [&_td]:!w-1/2">
             <Table.Tr>
               <Table.Td className="px-4">Date of Birth</Table.Td>
               {editMode?<Table.Td className="px-4">
@@ -142,14 +147,14 @@ const Profile = () => {
               {editMode?<Table.Td className="px-4">
                 <TagsInput {...form.getInputProps("allergies")} placeholder="Allergies seperated by comma" />
               </Table.Td>:
-              <Table.Td className="px-4">{profile.allergies?? '-'}</Table.Td>}
+              <Table.Td className="px-4">{arrayToCSV(profile.allergies)?? '-'}</Table.Td>}
             </Table.Tr>
             <Table.Tr>
               <Table.Td className="px-4">Chronic Disease</Table.Td>
               {editMode?<Table.Td className="px-4">
                 <TagsInput {...form.getInputProps("chronicDisease")} placeholder="Chronic disease seperated by comma" />
               </Table.Td>:
-              <Table.Td className="px-4">{profile.chronicDisease ?? '-'}</Table.Td>}
+              <Table.Td className="px-4">{arrayToCSV(profile.chronicDisease) ?? '-'}</Table.Td>}
             </Table.Tr>
           </Table.Tbody>
         </Table>
@@ -157,7 +162,7 @@ const Profile = () => {
       <Modal centered opened={opened} onClose={close} title={<span className="text-xl font-medium">Upload Profile Picture</span>}>
         {/* Modal content */}
       </Modal>
-    </form>
+    </div>
   );
 };
 
