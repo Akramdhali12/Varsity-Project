@@ -12,4 +12,37 @@ const bloodGroups = [
 const doctorSpecializations = ["Cardiologist", "Dermatologist", "Neurologist", "Pediatrician", "Orthopedic Surgeon", "Gynecologist", "Oncologist", "Psychiatrist", "Ophthalmologist", "Dentist", "Endocrinologist", "Gastroenterologist", "Nephrologist", "Pulmonologist", "Radiologist", "Urologist", "ENT Specialist", "General Surgeon", "Physician", "Rheumatologist"];
 const doctorDepartments = ["Cardiology", "Dermatology", "Neurology", "Pediatrics", "Orthopedics", "Gynecology", "Oncology", "Psychiatry", "Ophthalmology", "Dentistry", "Endocrinology", "Gastroenterology", "Nephrology", "Pulmonology", "Radiology", "Urology", "ENT", "General Surgery", "Internal Medicine", "Rheumatology", "Emergency", "Anesthesiology", "Pathology", "Hematology", "Physiotherapy"];
 
-export {bloodGroups,doctorSpecializations,doctorDepartments};
+const appointmentReasons = [
+  "General Checkup",
+  "Follow-up Visit",
+  "New Symptoms Consultation",
+  "Prescription Refill",
+  "Lab Test Review",
+  "Vaccination",
+  "Blood Test",
+  "X-Ray or Imaging",
+  "Physical Examination",
+  "Chronic Disease Management",
+  "Allergy Consultation",
+  "Fever and Cold",
+  "Cough or Sore Throat",
+  "Headache or Migraine",
+  "Back Pain",
+  "Skin Rash or Irritation",
+  "Stomach Pain or Indigestion",
+  "Diabetes Management",
+  "High Blood Pressure Check",
+  "Pregnancy Checkup",
+  "Pediatric Consultation",
+  "Eye Checkup",
+  "Dental Checkup",
+  "ENT (Ear, Nose, Throat) Problem",
+  "Post-Surgery Follow-up",
+  "Mental Health Consultation",
+  "Nutrition or Diet Advice",
+  "Fitness or Weight Management",
+  "Cardiology Consultation",
+  "Orthopedic Consultation"
+];
+
+export {bloodGroups,doctorSpecializations,doctorDepartments,appointmentReasons};

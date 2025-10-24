@@ -16,4 +16,12 @@ const updatedoctor = async(doctor)=>{
     });
 }
 
-export {getdoctor, updatedoctor};
+const getdoctorDropdown = async () => {
+    return axiosInstance.get("/profile/doctor/dropdowns")
+      .then((response) => response.data)
+      .catch((error) => {
+        throw error;
+      });
+  };
+
+export {getdoctor, updatedoctor, getdoctorDropdown};

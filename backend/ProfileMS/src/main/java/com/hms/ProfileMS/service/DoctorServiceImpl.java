@@ -1,9 +1,12 @@
 package com.hms.ProfileMS.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hms.ProfileMS.dto.DoctorDTO;
+import com.hms.ProfileMS.dto.DoctorDropdown;
 import com.hms.ProfileMS.exception.HmsException;
 import com.hms.ProfileMS.repository.DoctorRepository;
 
@@ -37,5 +40,15 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.findById(doctorDTO.getId()).orElseThrow(()-> new 
         HmsException("DOCTOR_NOT_FOUND"));
         return doctorRepository.save(doctorDTO.toEntity()).toDTO();
+    }
+
+    @Override
+    public Boolean doctorExists(Long id) throws HmsException {
+        return doctorRepository.existsById(id);
+    }
+
+    @Override
+    public List<DoctorDropdown> getDoctorDropdowns() throws HmsException {
+        return doctorRepository.findAllDoctorDropdowns();
     }
 }
