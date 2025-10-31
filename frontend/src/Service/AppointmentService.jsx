@@ -45,7 +45,15 @@ const getAppointmentsByDoctor = async (doctorId) => {
     });
 }
 
+const createAppointmentReport = async (data) => {
+  return axiosInstance.post("/appointment/report/create", data)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export { scheduleAppointment, cancelAppointment,
    getAppointment, getAppointmentDetails,
-   getAppointmentsByPatient, getAppointmentsByDoctor };
+   getAppointmentsByPatient, getAppointmentsByDoctor, createAppointmentReport };
 

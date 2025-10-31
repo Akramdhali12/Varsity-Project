@@ -95,5 +95,29 @@ const tests = [
   "Hemoglobin Test"
 ];
 
+const dosageFrequencies = [
+  "1-0-1", // Morning and Night
+  "1-1-1", // Morning, Afternoon, and Night
+  "1-0-0", // Morning only
+  "0-1-0", // Afternoon only
+  "0-0-1", // Night only
+  "1-1-0", // Morning and Afternoon
+  "0-1-1", // Afternoon and Night
+  "1-0-0 (before breakfast)",
+  "0-0-1 (after dinner)",
+  "1-0-1 (after meals)",
+  "SOS", // As needed (if required)
+  "BD",  // Twice daily
+  "TDS", // Three times daily
+  "OD",  // Once daily
+  "HS",  // At bedtime
+  "QID", // Four times daily
+  "Alternate Days",
+  "Weekly",
+  "Monthly"
+];
 
-export {bloodGroups,doctorSpecializations,doctorDepartments,appointmentReasons, symptoms, tests};
+
+
+export {bloodGroups,doctorSpecializations,doctorDepartments,
+  appointmentReasons, symptoms, tests, dosageFrequencies};

@@ -1,5 +1,6 @@
 package com.hms.appointment.service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class ApRecordServiceImpl implements ApRecordService {
         if (existingRecord.isPresent()) {
             throw new HmsException("APPOINTMENT_RECORD_ALREADY_EXISTS");
         }
+        request.setCreatedAt(LocalDateTime.now());
         Long id = apRecordRepository.save(request.toEntity()).getId();
         if (request.getPrescription() != null) {
             request.getPrescription().setAppointmentId(request.getAppointmentId());

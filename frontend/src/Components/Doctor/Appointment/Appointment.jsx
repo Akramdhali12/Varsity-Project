@@ -15,7 +15,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { IconEdit, IconEye, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconEye, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { getdoctorDropdown } from "../../../Service/DoctorProfileService";
 import { DateTimePicker } from "@mantine/dates";
