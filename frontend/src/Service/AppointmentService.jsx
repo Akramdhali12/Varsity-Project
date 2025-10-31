@@ -30,6 +30,22 @@ const getAppointmentDetails = async (id) => {
       throw error;
     });
 };
+const getAppointmentsByPatient = async (patientId) => {
+  return axiosInstance.get("/appointment/getAllByPatient/"+ patientId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+const getAppointmentsByDoctor = async (doctorId) => {
+  return axiosInstance.get("/appointment/getAllByDoctor/"+ doctorId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
 
-export { scheduleAppointment, cancelAppointment, getAppointment, getAppointmentDetails };
+export { scheduleAppointment, cancelAppointment,
+   getAppointment, getAppointmentDetails,
+   getAppointmentsByPatient, getAppointmentsByDoctor };
 

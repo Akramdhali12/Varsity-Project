@@ -1,6 +1,7 @@
 package com.hms.appointment.api;
 
-import org.apache.catalina.connector.Response;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,22 +37,36 @@ public class AppointmentAPI {
     }
 
     @PutMapping("/cancel/{appointmentId}")
-    public ResponseEntity<String> cancelAppointment(@PathVariable Long appointmentId) throws Exception {
+    public ResponseEntity<String> cancelAppointment(@PathVariable Long appointmentId) throws HmsException {
         appointmentService.cancelAppointment(appointmentId);
         return new ResponseEntity<>("Appointment Cancelled", HttpStatus.OK);
     }
 
     @GetMapping("/get/{appointmentId}")
-    public ResponseEntity<AppointmentDTO> getAppointmentDetails(@PathVariable Long appointmentId) throws Exception {
+    public ResponseEntity<AppointmentDTO> getAppointmentDetails(@PathVariable Long appointmentId) throws HmsException {
         return new ResponseEntity<>(
             appointmentService.getAppointmentDetails(appointmentId), 
             HttpStatus.OK);
     }
 
     @GetMapping("/get/details/{appointmentId}")
-    public ResponseEntity<AppointmentDetails> getAppointmentDetailsWithName(@PathVariable Long appointmentId) throws Exception {
+    public ResponseEntity<AppointmentDetails> getAppointmentDetailsWithName(@PathVariable Long appointmentId) throws HmsException {
         return new ResponseEntity<>(
             appointmentService.getAppointmentDetailsWithName(appointmentId), 
+            HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllByPatient/{patientId}")
+    public ResponseEntity<List<AppointmentDetails>> getAllAppointmentsByPatientId(@PathVariable Long patientId) throws HmsException {
+        return new ResponseEntity<>(
+            appointmentService.getAllAppointmentsByPatientId(patientId), 
+            HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllByDoctor/{doctorId}")
+    public ResponseEntity<List<AppointmentDetails>> getAllAppointmentsByDoctorId(@PathVariable Long doctorId) throws HmsException {
+        return new ResponseEntity<>(
+            appointmentService.getAllAppointmentsByDoctorId(doctorId), 
             HttpStatus.OK);
     }
 }

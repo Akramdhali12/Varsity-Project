@@ -45,4 +45,55 @@ const appointmentReasons = [
   "Orthopedic Consultation"
 ];
 
-export {bloodGroups,doctorSpecializations,doctorDepartments,appointmentReasons};
+const symptoms = [
+  "fever",
+  "cough",
+  "fatigue",
+  "headache",
+  "sore throat",
+  "runny nose",
+  "shortness of breath",
+  "chest pain",
+  "muscle aches",
+  "joint pain",
+  "loss of appetite",
+  "nausea",
+  "vomiting",
+  "diarrhea",
+  "dizziness",
+  "chills",
+  "sweating",
+  "abdominal pain",
+  "loss of taste",
+  "loss of smell"
+];
+
+const tests = [
+  "CBC",
+  "Chest X-ray",
+  "Urine Test",
+  "Blood Sugar",
+  "ECG",
+  "Liver Function Test (LFT)",
+  "Kidney Function Test (KFT)",
+  "Lipid Profile",
+  "Thyroid Function Test (TFT)",
+  "CT Scan",
+  "MRI",
+  "Ultrasound",
+  "Blood Pressure Measurement",
+  "Pulse Oximetry",
+  "COVID-19 Test",
+  "Dengue Test",
+  "Malaria Test",
+  "Pregnancy Test",
+  "Stool Test",
+  "Eye Examination",
+  "Hearing Test",
+  "Allergy Test",
+  "Vitamin D Test",
+  "Hemoglobin Test"
+];
+
+
+export {bloodGroups,doctorSpecializations,doctorDepartments,appointmentReasons, symptoms, tests};

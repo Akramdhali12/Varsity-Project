@@ -4,4 +4,22 @@ const formatDate=(dateString)=> {
   return date.toLocaleDateString("en-GB", options);
 }
 
-export {formatDate}
+const formatDateWithTime=(dateString)=> {
+  if (!dateString) return undefined;
+
+  const date = new Date(dateString);
+
+  return date.toLocaleString("en-US", {
+    weekday: "long",   // e.g. Sunday
+    year: "numeric",
+    month: "short",    // e.g. Oct
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true       // Enables AM/PM
+  });
+}
+
+
+
+export {formatDate,formatDateWithTime}

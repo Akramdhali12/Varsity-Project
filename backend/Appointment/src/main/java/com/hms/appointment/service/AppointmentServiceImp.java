@@ -1,8 +1,11 @@
 package com.hms.appointment.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
+import com.hms.appointment.service.ApiService;
 
 import com.hms.appointment.dto.AppointmentDetails;
 import com.hms.appointment.dto.AppointmentDTO;
@@ -72,6 +75,29 @@ public class AppointmentServiceImp implements AppointmentService {
         patientDTO.getPhone(), appointmentDTO.getDoctorId(),
         doctorDTO.getName(),appointmentDTO.getAppointmentTime(),appointmentDTO.getStatus(),
         appointmentDTO.getReason(),appointmentDTO.getNotes());
+    }
 
+    @Override
+    public List<AppointmentDetails> getAllAppointmentsByPatientId(Long patientId) throws HmsException {
+        return appointmentRepository.findAllByPatientId(patientId)
+        .stream().map(appointment->{
+            DoctorDTO doctorDTO = apiService.getDoctorById(appointment.getDoctorId()).block();
+            if (doctorDTO != null) {
+                appointment.setDoctorName(doctorDTO.getName());
+            }
+            return appointment;
+        }).toList();
+    }
+
+    @Override
+    public List<AppointmentDetails> getAllAppointmentsByDoctorId(Long doctorId) throws HmsException {
+        return appointmentRepository.findAllByDoctorId(doctorId)
+        .stream().map(appointment->{
+            PatientDTO patientDTO = apiService.getPatientById(appointment.getPatientId()).block();
+                appointment.setPatientName(patientDTO.getName());
+                appointment.setPatientEmail(patientDTO.getEmail());
+                appointment.setPatientPhone(patientDTO.getPhone());
+            return appointment;
+        }).toList();
     }
 }

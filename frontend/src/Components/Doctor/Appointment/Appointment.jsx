@@ -15,7 +15,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { IconEdit, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconEye, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { getdoctorDropdown } from "../../../Service/DoctorProfileService";
 import { DateTimePicker } from "@mantine/dates";
@@ -24,6 +24,7 @@ import { appointmentReasons } from "../../../Data/DropDownData";
 import { useSelector } from "react-redux";
 import {
   cancelAppointment,
+  getAppointmentsByDoctor,
   getAppointmentsByPatient,
   scheduleAppointment,
 } from "../../../Service/AppointmentService";
@@ -34,8 +35,10 @@ import {
 import { formatDateWithTime } from "../../../Utility/DateUtility";
 import { modals } from "@mantine/modals";
 import { Toolbar } from "primereact/toolbar";
+import { data, useNavigate } from "react-router-dom";
 
 const Appointment = () => {
+  const navigate = useNavigate();
   const [opened, { open, close }] = useDisclosure(false);
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
@@ -63,7 +66,7 @@ const Appointment = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      doctorName: {
+      patientName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
       },
@@ -84,8 +87,9 @@ const Appointment = () => {
   };
 
   const fetchData = () => {
-    getAppointmentsByPatient(user.profileId)
+    getAppointmentsByDoctor(user.profileId)
       .then((data) => {
+        console.log("Fetched appointments:", data);
         setAppointments(getCustomers(data));
       })
       .catch((error) => {
@@ -106,7 +110,6 @@ const Appointment = () => {
 
     getdoctorDropdown()
       .then((data) => {
-        console.log(data);
         setDoctors(
           data.map((doctor) => ({ value: "" + doctor.id, label: doctor.name }))
         );
@@ -182,7 +185,7 @@ const Appointment = () => {
       children: (
         <Text size="sm">
           Are you sure you want to cancel the appointment with Dr.{" "}
-          {rowData.doctorName} scheduled on{" "}
+          {rowData.patientName} scheduled on{" "}
           {formatDateWithTime(rowData.appointmentTime)}? This action cannot be
           undone.
         </Text>
@@ -211,8 +214,8 @@ const Appointment = () => {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex gap-2">
-        <ActionIcon>
-          <IconEdit size={16} stroke={1.5} />
+        <ActionIcon onClick={()=>navigate(""+rowData.id)}>
+          <IconEye size={16} stroke={1.5} />
         </ActionIcon>
         <ActionIcon color="red" onClick={() => handleDelete(rowData)}>
           <IconTrash size={16} stroke={1.5} />
@@ -277,8 +280,7 @@ const Appointment = () => {
     <div className="card">
       <Toolbar
         className="mb-4"
-        start={leftToolbarTemplate}
-        center={centerToolbarTemplate}
+        start={centerToolbarTemplate}
         end={rightToolbarTemplate}
       ></Toolbar>
       <DataTable
@@ -290,16 +292,20 @@ const Appointment = () => {
         loading={loading}
         dataKey="id"
         filters={filters}
-        globalFilterFields={["doctorName", "reason", "notes", "status"]}
+        globalFilterFields={["patientName", "reason", "notes", "status"]}
         emptyMessage="No appointment found."
         onFilter={(e) => setFilters(e.filters)}
       >
         <Column
-          field="doctorName"
-          header="Doctor"
+          field="patientName"
+          header="Patient"
           sortable
           filter
           filterPlaceholder="Search by name"
+        />
+        <Column
+          field="patientPhone"
+          header="Phone"
         />
         <Column
           field="appointmentTime"
