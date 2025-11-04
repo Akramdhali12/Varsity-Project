@@ -3,11 +3,10 @@ package com.hms.appointment.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
-import com.hms.appointment.service.ApiService;
 
 import com.hms.appointment.dto.AppointmentDetails;
+import com.hms.appointment.clients.ProfileClient;
 import com.hms.appointment.dto.AppointmentDTO;
 import com.hms.appointment.dto.DoctorDTO;
 import com.hms.appointment.dto.PatientDTO;
@@ -25,13 +24,16 @@ public class AppointmentServiceImp implements AppointmentService {
     @Autowired
     private ApiService apiService;
     
+    @Autowired
+    private ProfileClient profileClient;
+    
     @Override
     public Long scheduleAppointment(AppointmentDTO appointmentDTO) throws HmsException {
-        Boolean doctorExists = apiService.doctorExists(appointmentDTO.getDoctorId()).block();
+        Boolean doctorExists = profileClient.doctorExists(appointmentDTO.getDoctorId());
         if(doctorExists==null || !doctorExists) {
             throw new HmsException("DOCTOR_NOT_FOUND");
         }
-        Boolean patientExists = apiService.patientExists(appointmentDTO.getPatientId()).block();
+        Boolean patientExists = profileClient.patientExists(appointmentDTO.getPatientId());
         if(patientExists==null || !patientExists) {
             throw new HmsException("PATIENT_NOT_FOUND");
         }

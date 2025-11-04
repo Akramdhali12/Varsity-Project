@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hms.ProfileMS.dto.DoctorDTO;
@@ -51,5 +52,10 @@ public class DoctorAPI {
     @GetMapping("/dropdowns")
     public ResponseEntity<List<DoctorDropdown>> getDoctorDropdowns() throws HmsException{
         return new ResponseEntity<>(doctorService.getDoctorDropdowns(),HttpStatus.OK);
+    }
+
+    @GetMapping("/getDoctorsById")
+    public ResponseEntity<List<DoctorDropdown>> getDoctorsById(@RequestParam List<Long> ids) throws HmsException{
+        return new ResponseEntity<>(doctorService.getDoctorsById(ids),HttpStatus.OK);
     }
 }
