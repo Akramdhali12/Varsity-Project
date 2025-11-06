@@ -53,7 +53,24 @@ const createAppointmentReport = async (data) => {
     });
 };
 
+const isReportExists = async(appointmentId)=>{
+  return axiosInstance.get('/appointment/report/isRecordExists/'+appointmentId)
+      .then((response)=>response.data)
+      .catch((error)=>{throw error;})
+}
+const getReportsByPatientId = async(patientId)=>{
+  return axiosInstance.get('/appointment/report/getRecordsByPatientId/'+patientId)
+      .then((response)=>response.data)
+      .catch((error)=>{throw error;})
+}
+const getPrescriptionsByPatientId = async(patientId)=>{
+  return axiosInstance.get('/appointment/report/getPrescriptionsByPatientId/'+patientId)
+      .then((response)=>response.data)
+      .catch((error)=>{throw error;})
+}
+
 export { scheduleAppointment, cancelAppointment,
    getAppointment, getAppointmentDetails,
-   getAppointmentsByPatient, getAppointmentsByDoctor, createAppointmentReport };
+   getAppointmentsByPatient, getAppointmentsByDoctor, createAppointmentReport,
+   isReportExists,getReportsByPatientId,getPrescriptionsByPatientId };
 

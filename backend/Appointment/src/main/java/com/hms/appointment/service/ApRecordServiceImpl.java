@@ -89,6 +89,7 @@ public class ApRecordServiceImpl implements ApRecordService {
             .map(RecordDetails::getDoctorId)
             .distinct()
             .toList();
+        
         List<DoctorName> doctors = profileClient.getDoctorsById(doctorIds);
         Map<Long,String> doctorMap = doctors.stream().collect(Collectors.toMap(DoctorName::getId,DoctorName::getName));
         recordDetails.forEach(record->{

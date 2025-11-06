@@ -19,6 +19,7 @@ import {
   IconVaccine,
 } from "@tabler/icons-react";
 import ApReport from "./ApReport";
+import Prescription from "./Prescription";
 
 const AppointmentDetails = () => {
   const { id } = useParams();
@@ -32,7 +33,7 @@ const AppointmentDetails = () => {
       .catch((err) => {
         console.error("Error fetching appointment details:", err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <div>
@@ -113,7 +114,7 @@ const AppointmentDetails = () => {
 
         <Tabs.Panel value="medical">meidcal content</Tabs.Panel>
 
-        <Tabs.Panel value="prescriptions">Prescriptions</Tabs.Panel>
+        <Tabs.Panel value="prescriptions"><Prescription appointment={appointment}/></Tabs.Panel>
 
         <Tabs.Panel value="report"><ApReport appointment={appointment}/></Tabs.Panel>
       </Tabs>

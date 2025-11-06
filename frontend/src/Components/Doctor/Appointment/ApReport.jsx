@@ -1,15 +1,65 @@
 import { ActionIcon, Button, Fieldset, MultiSelect, NumberInput, Select, TextInput } from "@mantine/core";
-import React, { useState } from "react";
-import { IconTrash } from "@tabler/icons-react";
+import React, { useEffect, useState } from "react";
+import { IconEye, IconSearch, IconTrash } from "@tabler/icons-react";
 import { dosageFrequencies, symptoms, tests } from "../../../Data/DropDownData";
 import { useForm } from "@mantine/form";
-import { createAppointmentReport } from "../../../Service/AppointmentService";
+import { createAppointmentReport, getReportsByPatientId, isReportExists } from "../../../Service/AppointmentService";
 import { errorNotification, successNotification } from "../../../Utility/NotificationUtil";
 import { useDispatch } from "react-redux";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import { useNavigate } from "react-router-dom";
+import { FilterMatchMode } from "primereact/api";
+import { formatDate } from "../../../Utility/DateUtility";
 
 const ApReport = ({appointment}) => {
+
   const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const [data,setData]=useState([]);
+  const [allowAdd,setAllowAdd] = useState(false);
+  const [edit,setEdit] = useState(false);
   const [loading, setLoading] =useState(false);
+  const [globalFilterValue, setGlobalFilterValue] = useState("");
+  const [filters, setFilters] = useState({});
+      const initFilters = () => {
+      setFilters({
+          global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      });
+          setGlobalFilterValue("");
+      };
+      const onGlobalFilterChange = (e) => {
+    const value = e.target.value;
+    setFilters((prev) => ({ ...prev, global: { ...prev.global, value } }));
+    setGlobalFilterValue(value);
+    };
+
+  useEffect(()=>{
+    initFilters();
+    fetchData();
+  },[appointment?.patientId,appointment.id])
+
+  const fetchData =()=>{
+    if (!appointment?.patientId) {
+    console.warn("No patient ID found — skipping prescription fetch");
+    return;
+  }
+  
+    getReportsByPatientId(appointment.patientId).then((res)=>{
+      console.log("Reports Data:",res);
+      setData(res);
+    }).catch((err)=>{
+      console.log("Error fetching reports:",err);
+    });
+
+    isReportExists(appointment.id).then((res)=>{
+      setAllowAdd(!res);
+      console.log("Report existence check:",res);
+    }).catch((err)=>{
+      console.error("Error checking report existence:",err);
+      setAllowAdd(true);
+    })
+  }
 
   const form = useForm({
     initialValues: {
@@ -74,6 +124,9 @@ const ApReport = ({appointment}) => {
       .then((res)=>{
         successNotification("Report Created","Appointment report created successfully");
         form.reset();
+        setEdit(false);
+        setAllowAdd(false);
+        fetchData();
       })
       .catch((err)=>{
         errorNotification("Error","Failed to create appointment report");
@@ -82,8 +135,73 @@ const ApReport = ({appointment}) => {
       });
   };
 
+  const renderHeader = () =>{
+    return (
+    <div className="flex justify-between items-center">
+      {allowAdd&&<Button variant="filled" onClick={()=>setEdit(true)}>Add Report</Button>}
+      <TextInput
+        leftSection={<IconSearch />}
+        fw={500}
+        value={globalFilterValue}
+        onChange={onGlobalFilterChange}
+        placeholder="Keyword Search"
+      />
+    </div>
+  );
+};
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <div className="flex gap-2">
+        {/* <ActionIcon onClick={()=>navigate("/doctor/appointments/"+rowData.appointmentId)}>
+          <IconEye size={16} stroke={1.5} />
+        </ActionIcon> */}
+      </div>
+    );
+  };
+  const header = renderHeader()
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)} className="grid gap-5">
+    <div>
+      {!edit ? <DataTable header={header}
+                stripedRows
+                value={data}
+                paginator
+                showGridlines
+                rows={10}
+                loading={loading}
+                dataKey="id"
+                filters={filters}
+                globalFilterFields={["doctorName","notes"]}
+                emptyMessage="No appointment found."
+                onFilter={(e) => setFilters(e.filters)}
+              >
+                <Column
+                  field="doctorName"
+                  header="Doctor"
+                />
+                <Column
+                  field="diagnosis"
+                  header="Diagnosis"
+                />
+                <Column
+                  field="reportDate"
+                  header="Report Date"
+                  sortable
+                  body={(rowData)=>formatDate(rowData.createdAt)}
+                />
+                
+                <Column
+                  field="notes"
+                  header="Notes"
+                />
+                <Column
+                          headerStyle={{ width: "5rem", textAlign: "center" }}
+                          bodyStyle={{ textAlign: "center", overflow: "visible" }}
+                          body={actionBodyTemplate}
+                          filter
+                        />
+                
+              </DataTable>
+    :<form onSubmit={form.onSubmit(handleSubmit)} className="grid gap-5">
       <Fieldset className="grid gap-4 grid-cols-2" legend={<span className="text-xl" style={{ color: '#32b9a9' }}>Personal information</span>} radius="md">
         <MultiSelect {...form.getInputProps("symptoms")} className="col-span-2" withAsterisk
           label="Symptoms"
@@ -136,7 +254,8 @@ const ApReport = ({appointment}) => {
           Submit Report
         </Button>
       </div>
-    </form>
+    </form>}
+    </div>
   );
 };
 
