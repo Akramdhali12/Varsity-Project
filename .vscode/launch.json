@@ -57,6 +57,16 @@
             "args": "",
             "envFile": "${workspaceFolder}/.env",
             "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=50504 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=Appointment"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PharmacyApplication<pharmacy>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.hms.pharmacy.PharmacyApplication",
+            "projectName": "pharmacy",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
