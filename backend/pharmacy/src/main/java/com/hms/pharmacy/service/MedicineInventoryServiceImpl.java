@@ -3,9 +3,11 @@ package com.hms.pharmacy.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.hms.pharmacy.dto.MedicineInventoryDTO;
+import com.hms.pharmacy.dto.StockStatus;
 import com.hms.pharmacy.entity.MedicineInventory;
 import com.hms.pharmacy.exception.HmsException;
 import com.hms.pharmacy.repository.MedicineInventoryRepository;
@@ -35,6 +37,8 @@ public class MedicineInventoryServiceImpl implements MedicineInventoryService {
     public MedicineInventoryDTO addMedicine(MedicineInventoryDTO medicine) throws HmsException {
         medicine.setAddedDate(LocalDate.now());
         medicineService.addStock(medicine.getMedicineId(), medicine.getQuantity());
+        medicine.setInitialQuantity(medicine.getQuantity());
+        medicine.setStatus(StockStatus.ACTIVE);
         return medicineInventoryRepository.save(medicine.toEntity()).toDTO();
     }
 
@@ -51,6 +55,7 @@ public class MedicineInventoryServiceImpl implements MedicineInventoryService {
             }
             
             existingInventory.setQuantity(medicine.getQuantity());
+            existingInventory.setInitialQuantity(medicine.getInitialQuantity());
             existingInventory.setExpiryDate(medicine.getExpiryDate());
             return medicineInventoryRepository.save(existingInventory).toDTO();
 
@@ -60,6 +65,28 @@ public class MedicineInventoryServiceImpl implements MedicineInventoryService {
     public void deleteMedicine(Long id) throws HmsException {
         medicineInventoryRepository.deleteById(id);
     }
+
+    private void markExpired(List<MedicineInventory> inventories) throws HmsException{
+        for(MedicineInventory inventory:inventories){
+            inventory.setStatus(StockStatus.EXPIRED);
+        }
+        medicineInventoryRepository.saveAll(inventories);
+    }
+
+    @Override
+    @Scheduled(cron = "0 37 14 * * ?")
+    public void deleteExpiredMedicines() throws HmsException{
+        List<MedicineInventory> expiredMedicines = medicineInventoryRepository.findByExpiryDateBefore(LocalDate.now());
+        for(MedicineInventory medicine:expiredMedicines){
+            medicineService.removeStock(medicine.getMedicine().getId(), medicine.getQuantity());
+        }
+        this.markExpired(expiredMedicines);
+    }
+
+    // @Scheduled(cron = "0 30 14 * * ?")
+    // public void print(){
+    //     System.out.println("Scheduled task running...");
+    // }
 
     
 }
