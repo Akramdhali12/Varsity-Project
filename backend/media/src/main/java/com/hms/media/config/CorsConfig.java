@@ -1,4 +1,4 @@
-package com.hms.pharmacy.config;
+package com.hms.media.config;
 
 
 import org.springframework.context.annotation.Bean;
