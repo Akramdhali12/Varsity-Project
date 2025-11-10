@@ -1,6 +1,9 @@
 import axiosInstance from "../Interceptor/AxiosInterceptor";
 
 const getdoctor = async (id) => {
+  if (!id && id !== 0) {
+    throw new Error("Invalid medicine ID");
+  }
   return axiosInstance.get("/profile/doctor/get/"+ id)
     .then((response) => response.data)
     .catch((error) => {

@@ -44,7 +44,6 @@ const ApReport = ({appointment}) => {
     console.warn("No patient ID found — skipping prescription fetch");
     return;
   }
-  
     getReportsByPatientId(appointment.patientId).then((res)=>{
       console.log("Reports Data:",res);
       setData(res);
@@ -139,6 +138,7 @@ const ApReport = ({appointment}) => {
     return (
     <div className="flex justify-between items-center">
       {allowAdd&&<Button variant="filled" onClick={()=>setEdit(true)}>Add Report</Button>}
+      {/* <Button variant="filled" onClick={()=>setEdit(true)}>Add Report</Button> */}
       <TextInput
         leftSection={<IconSearch />}
         fw={500}

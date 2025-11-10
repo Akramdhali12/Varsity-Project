@@ -13,6 +13,8 @@ import DoctorProfilePage from "../Pages/Doctor/DoctorProfilePage";
 import PatientAppointmentPage from "../Pages/Patient/PatientAppointmentPage";
 import DoctorAppointmentPage from "../Pages/Doctor/DoctorAppointmentPage";
 import DoctorAppointmentDetailsPage from "../Pages/Doctor/DoctorAppointmentDetailsPage";
+import AdminMedicinePage from "../Pages/Admin/AdminMedicinePage";
+import NotFoundPage from "../Pages/NotFoundPage";
 
 const AppRoutes=()=> {
   return (
@@ -20,13 +22,13 @@ const AppRoutes=()=> {
            <Routes>
             <Route path="/login" element={<PublicRoute><LoginPage/></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><RegisterPage/></PublicRoute>} />
-            <Route path="/" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}>
-              <Route path="/dashboard" element={<Random/>} />
-              <Route path="/patients" element={<Random/>} />
-              <Route path="/doctors" element={<Random/>} />
-              <Route path="/pharmacy" element={<Random/>} />
-              <Route path="/staffs" element={<Random/>} />
-              <Route path="/settings" element={<Random/>} />
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}>
+              <Route path="dashboard" element={<Random/>} />
+              <Route path="medicine" element={<AdminMedicinePage/>} />
+              <Route path="inventory" element={<Random/>} />
+              <Route path="sales" element={<Random/>} />
+              <Route path="patients" element={<Random/>} />
+              <Route path="doctors" element={<Random/>} />
             </Route>
             <Route path="/doctor" element={<ProtectedRoute><DoctorDashboard/></ProtectedRoute>}>
               <Route path="dashboard" element={<Random/>} />
@@ -42,6 +44,7 @@ const AppRoutes=()=> {
               <Route path="profile" element={<PatientProfilePage/>} />
               <Route path="appointments" element={<PatientAppointmentPage/>} />
             </Route>
+            <Route path="*" element={<NotFoundPage/>}/>
           </Routes>
     </BrowserRouter>
   );
