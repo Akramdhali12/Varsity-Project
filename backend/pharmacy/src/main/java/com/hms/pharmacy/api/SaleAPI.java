@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hms.pharmacy.dto.ResponseDTO;
 import com.hms.pharmacy.dto.SaleDTO;
 import com.hms.pharmacy.dto.SaleItemDTO;
+import com.hms.pharmacy.dto.SaleRequest;
 import com.hms.pharmacy.exception.HmsException;
 import com.hms.pharmacy.service.SaleItemService;
 import com.hms.pharmacy.service.SaleService;
@@ -32,7 +33,7 @@ public class SaleAPI {
     private final SaleItemService saleItemService;
 
     @PostMapping("/create")
-    public ResponseEntity<Long> createSale(@RequestBody SaleDTO dto) throws HmsException{
+    public ResponseEntity<Long> createSale(@RequestBody SaleRequest dto) throws HmsException{
         return new ResponseEntity<>(saleService.createSale(dto),HttpStatus.CREATED);
     }
 
@@ -48,9 +49,15 @@ public class SaleAPI {
         return new ResponseEntity<>(saleItems,HttpStatus.OK);
     }
 
-    @GetMapping("/gt/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<SaleDTO> getSale(@PathVariable Long id) throws HmsException{
         SaleDTO sale = saleService.getSale(id);
         return new ResponseEntity<>(sale,HttpStatus.OK);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<SaleDTO>> getAllSales() throws HmsException{
+        List<SaleDTO> sales = saleService.getAllSales();
+        return new ResponseEntity<>(sales,HttpStatus.OK);
     }
 }

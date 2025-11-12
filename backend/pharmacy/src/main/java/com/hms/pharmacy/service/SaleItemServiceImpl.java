@@ -54,5 +54,14 @@ public class SaleItemServiceImpl implements SaleItemService {
                 .map(SaleItem::toDTO)
                 .orElseThrow(()->new HmsException("SALE_ITEM_NOT_FOUND"));
     }
+
+    @Override
+    public void createSaleItems(Long saleId, List<SaleItemDTO> saleItemDTOs) throws HmsException {
+        
+        saleItemDTOs.stream().map((x)->{
+            x.setSaleId(saleId);
+            return x.toEntity();
+        }).forEach(saleItemRepository::save);
+    }
     
 }
