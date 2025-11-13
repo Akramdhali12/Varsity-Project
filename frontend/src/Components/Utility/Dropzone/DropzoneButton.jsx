@@ -5,18 +5,25 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import classes from './DropzoneButton.module.css';
 import { uploadMedia } from '../../../Service/MediaService';
 
-export function DropzoneButton() {
+export function DropzoneButton({close,form,id}) {
   const theme = useMantineTheme();
   const openRef = useRef(null);
-  const [file,setFile] = useState(null);
+  const [file,setFile] = useState();
+  const [fileId,setFileId] = useState(null);
 
-  const handleDrop = async (files)=>{
+  const handleDrop = (files)=>{
     setFile(files[0]);
     uploadMedia(files[0]).then((data)=>{
         console.log('File uploaded successfully:',data);
+        setFileId(data.id);
     }).catch((error)=>{
         console.error('Error uploading file:',error);
     })
+  }
+
+  const handleSave =()=>{
+    form.setFieldValue('profilePictureId',fileId);
+    close();
   }
 
   return (
@@ -64,9 +71,12 @@ export function DropzoneButton() {
       {!file?<Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current?.()}>
         Select photo
       </Button>:
-      <Button className={classes.control} color='red' size="md" radius="xl" onClick={() => openRef.current?.()}>
-        Select photo
-      </Button>}
+      <div className='flex gap-3 mt-3 justify-center'>
+      <Button color='red' size="md" radius="xl" onClick={() => openRef.current?.()}>
+        Change photo
+      </Button>
+      <Button size="md" radius="xl" onClick={handleSave}>Save</Button>
+      </div>}
     </div>
   );
 }

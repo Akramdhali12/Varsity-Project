@@ -11,6 +11,7 @@ import { formatDate } from "../../../Utility/DateUtility";
 import {errorNotification, successNotification} from "../../../Utility/NotificationUtil"
 import { arrayToCSV } from "../../../Utility/OtherUtility";
 import { DropzoneButton } from "../../Utility/Dropzone/DropzoneButton";
+import useProtectedImage from "../../Utility/Dropzone/useProtectedImage";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ const Profile = () => {
       phone:'',
       address:'',
       idCardNo:'',
+      profilePictureId:'',
       bloodGroup:'',
       allergies:[],
       chronicDisease:[],
@@ -69,8 +71,9 @@ const Profile = () => {
   errorNotification(msg);
       
     })
-    
   }
+
+  const url = useProtectedImage(profile.profilePictureId);
 
   return (
     <div className="p-10">
@@ -79,7 +82,7 @@ const Profile = () => {
           <div className="flex flex-col items-center gap-3">
           <Avatar
             variant="filled"
-            src="/profile.png"
+            src={url}
             size={120}
             alt="it's me"
           />
@@ -161,7 +164,7 @@ const Profile = () => {
         </Table>
       </div>
       <Modal centered opened={opened} onClose={close} title={<span className="text-xl font-medium">Upload Profile Picture</span>}>
-        <DropzoneButton/>
+        <DropzoneButton close={close} form={form} id="profilePictureId"/>
       </Modal>
     </div>
   );
