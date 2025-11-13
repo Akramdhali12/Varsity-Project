@@ -20,6 +20,7 @@ import {
   IconCheck,
   IconEdit,
   IconEye,
+  IconHome,
   IconPlus,
   IconSearch,
   IconTrash,
@@ -36,9 +37,11 @@ import {
   getAllMedicines,
 } from "../../../Service/MedicineService";
 import {formatDate} from '../../../Utility/DateUtility'
-
+import { spotlight, Spotlight} from '@mantine/spotlight';
 import { AddSale, getAllSaleItems, getAllSales } from "../../../Service/SalesService";
 import { useDisclosure } from "@mantine/hooks";
+import { getAllPrescriptions, getMedicinesByPrescriptionId } from "../../../Service/AppointmentService";
+import { freqMap } from "../../../Data/DropDownData";
 /**
  * @typedef {Object} SaleItem
  * @property {string} medicineId
@@ -53,6 +56,7 @@ const Sales = () => {
   const [opened,{open,close}] = useDisclosure(false);
   const [saleItems,setSaleItems] = useState([]);
   const [medicineMap, setMedicineMap] = useState({});
+  const [actions,setActions] = useState([]);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [filters, setFilters] = useState({});
   const initFilters = () => {
@@ -82,8 +86,50 @@ const Sales = () => {
       .catch((err) => {
         console.log("Error fetching reports:", err);
       });
+      getAllPrescriptions().then((res)=>{
+        setActions(res.map((item)=>({
+          id:String(item.id),
+          label:item.patientName,
+          description:`Prescription by Dr. ${item.doctorName} on ${formatDate(item.prescriptionDate)}`,
+          onClick:()=>handleImport(item),
+        })));
+      }).catch((err)=>{
+        console.error("Error fetching prescriptions:",err)
+      })
     fetchData();
   }, []);
+
+  const handleImport =(item)=>{
+    setLoading(true);
+    getMedicinesByPrescriptionId(item.id).then((res)=>{
+      setSaleItems(res);
+      form.setValues({
+        buyerName:item.patientName,
+        saleItems:res.filter((x)=>x.medicineId != null).map((x)=>({medicineId:String(x.medicineId),quantity:calculateQuantity(x.frequency,x.duration)}))
+      });
+    }).catch((err)=>{
+      console.error("errror");
+    }).finally(()=>{
+      setLoading(false);
+    });
+    
+  }
+
+  const calculateQuantity = (freq,duration)=>{
+    const freqValue = freqMap[freq] || 0;
+    return Math.ceil(freqValue*duration);
+  }
+  
+//   const actions = [
+//   {
+//     id: 'home',
+//     label: 'Home',
+//     description: 'Get to home page',
+//     onClick: () => console.log('Home'),
+//     leftSection: <IconHome size={24} stroke={1.5} />,
+//   },
+  
+// ];
 
   const fetchData = () => {
     getAllSales().then((res)=>{
@@ -134,6 +180,17 @@ const Sales = () => {
 
   const handleSubmit = (values) => {
     let update = false;
+    let flag = false;
+    values.saleItems.forEach((item,index)=>{
+      if(item.quantity > (medicineMap[item.medicineId]?.stock || 0)){
+        flag = true;
+        form.setFieldError(`saleItems.${index}.quantity`,'Quantity exceeds available stock');
+      }
+    });
+    if(flag){
+      errorNotification("Quantity exceeds available stock");
+      return;
+    }
     const saleItems = values.saleItems.map((x)=>({...x,unitPrice:medicineMap[x.medicineId]?.unitPrice}));
     const totalAmount = saleItems.reduce((acc,item)=>acc+(item.unitPrice*item.quantity),0);
     
@@ -218,6 +275,11 @@ const Sales = () => {
       </Badge>
     );
   };
+
+  const handleSpotlight =()=>{
+    spotlight.open();
+  }
+
   return (
     <div>
       {!edit ? (
@@ -255,6 +317,11 @@ const Sales = () => {
           />
         </DataTable>
       ) : (
+        <div>
+          <div className="mb-5 flex items-center justify-between">
+            <h3 style={{color:"rgb(50, 185, 169)"}} className="text-xl font-medium">Sell Medicine</h3>
+            <Button variant="filled" leftSection={<IconPlus/>} onClick={handleSpotlight}>Import Prescription</Button>
+          </div>
         <form onSubmit={form.onSubmit(handleSubmit)} className="grid gap-5">
           <LoadingOverlay visible={loading}/>
           <Fieldset
@@ -347,6 +414,7 @@ const Sales = () => {
             </Button>
           </div>
         </form>
+        </div>
       )}
       <Modal opened={opened} size="xl" onClose={close} title="Sold Medicines" centered>
               <div className="grid grid-cols-2 gap-5">
@@ -389,6 +457,15 @@ const Sales = () => {
                 )
               }
             </Modal>
+            <Spotlight
+              actions={actions}
+              nothingFound="Nothing found..."
+              highlightQuery
+              searchProps={{
+              leftSection: <IconSearch size={20} stroke={1.5} />,
+              placeholder: 'Search...',
+              }}
+            />
     </div>
   );
 };

@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-import javax.management.relation.Role;
-
 import com.hms.ProfileMS.dto.BloodGroup;
 import com.hms.ProfileMS.dto.PatientDTO;
 
@@ -30,6 +28,7 @@ public class Patient{
     @Column(unique = true)
     private String email;
     private LocalDate dob;
+    private Long profilePictureId;
     private String phone;
     private String address;
     @Column(unique = true)
@@ -39,7 +38,7 @@ public class Patient{
     private String chronicDisease;
 
     public PatientDTO toDTO() {
-        return new PatientDTO(this.id, this.name, this.email, this.dob, this.phone,
+        return new PatientDTO(this.id, this.name, this.email, this.dob,this.profilePictureId, this.phone,
         this.address, this.idCardNo, this.bloodGroup, this.allergies, this.chronicDisease);
     }
 

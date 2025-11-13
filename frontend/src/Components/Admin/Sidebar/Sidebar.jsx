@@ -21,7 +21,7 @@ const links = [
     icon: <IconLayoutGrid stroke={1.5} />,
     url: "/admin/dashboard",
   },
-  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/admin/patient" },
+  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/admin/patients" },
   { name: "Doctors", icon: <IconBed stroke={1.5} />, url: "/admin/doctors" },
   
   { name: "Medicine", icon: <IconPill stroke={1.5} />, url: "/admin/medicine" },

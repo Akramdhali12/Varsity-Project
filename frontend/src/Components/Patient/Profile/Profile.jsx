@@ -10,6 +10,7 @@ import { getPatient, updatePatient } from "../../../Service/PatientProfileServic
 import { formatDate } from "../../../Utility/DateUtility";
 import {errorNotification, successNotification} from "../../../Utility/NotificationUtil"
 import { arrayToCSV } from "../../../Utility/OtherUtility";
+import { DropzoneButton } from "../../Utility/Dropzone/DropzoneButton";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -160,7 +161,7 @@ const Profile = () => {
         </Table>
       </div>
       <Modal centered opened={opened} onClose={close} title={<span className="text-xl font-medium">Upload Profile Picture</span>}>
-        {/* Modal content */}
+        <DropzoneButton/>
       </Modal>
     </div>
   );

@@ -69,8 +69,21 @@ const getPrescriptionsByPatientId = async(patientId)=>{
       .catch((error)=>{throw error;})
 }
 
+const getAllPrescriptions = async()=>{
+  return axiosInstance.get('/appointment/report/getAllPrescriptions')
+      .then((response)=>response.data)
+      .catch((error)=>{throw error;})
+}
+
+const getMedicinesByPrescriptionId = async(prescriptionId)=>{
+  return axiosInstance.get('/appointment/report/getMedicinesByPrescriptionId/'+prescriptionId)
+      .then((response)=>response.data)
+      .catch((error)=>{throw error;})
+}
+
 export { scheduleAppointment, cancelAppointment,
    getAppointment, getAppointmentDetails,
    getAppointmentsByPatient, getAppointmentsByDoctor, createAppointmentReport,
-   isReportExists,getReportsByPatientId,getPrescriptionsByPatientId };
+   isReportExists,getReportsByPatientId,getPrescriptionsByPatientId,getAllPrescriptions,
+  getMedicinesByPrescriptionId };
 

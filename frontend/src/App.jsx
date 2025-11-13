@@ -3,6 +3,8 @@ import './App.css'
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/spotlight/styles.css';
+import '@mantine/dropzone/styles.css';
 import { Button, createTheme, MantineProvider } from '@mantine/core';
 import AppRoutes from './Routes/AppRoutes';
 import { Provider } from 'react-redux';

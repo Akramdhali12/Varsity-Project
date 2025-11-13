@@ -28,5 +28,8 @@ public interface ProfileClient {
     @GetMapping("/profile/doctor/getDoctorsById")
     List<DoctorName> getDoctorsById(@RequestParam List<Long> ids);
 
+    @GetMapping("/profile/patient/getPatientsById")
+    List<DoctorName> getPatientsById(@RequestParam List<Long> ids);
+
 
 }

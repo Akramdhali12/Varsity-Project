@@ -16,4 +16,12 @@ const updatePatient = async(patient)=>{
     });
 }
 
-export {getPatient, updatePatient};
+const getAllPatients = async()=>{
+    return axiosInstance.get("/profile/patient/getAll")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+export {getPatient, updatePatient,getAllPatients};

@@ -21,6 +21,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public MediaFileDTO storeFile(MultipartFile file) throws IOException {
+        
         MediaFile mediaFile = MediaFile.builder()
             .name(file.getOriginalFilename())
             .type(file.getContentType())
