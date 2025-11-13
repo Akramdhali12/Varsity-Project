@@ -16,7 +16,7 @@ const Doctor = () => {
   return (
     <div>
         <div style={{color:"rgb(50, 185, 169)"}} className='text-xl mb-5 font-semibold'>Doctor</div>
-        <div className='grid grid-cols-4 gap-5'>
+        <div className='grid grid-cols-3 gap-3'>
             {
                 doctors.map((doctor)=>(
                     <DoctorCard key={doctor.id} {...doctor}/>

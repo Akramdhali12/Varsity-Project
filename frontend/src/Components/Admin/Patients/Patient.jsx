@@ -15,8 +15,10 @@ const Patient = () => {
     },[])
   return (
     <div>
-        <div style={{color:"rgb(50, 185, 169)"}} className='text-xl mb-5 font-semibold'>Patient</div>
-        <div className='grid grid-cols-4 gap-5'>
+        <div style={{color:"rgb(50, 185, 169)"}} className='text-xl mb-5 font-semibold'>
+            Patient
+        </div>
+        <div className='grid grid-cols-4 gap-3'>
             {
                 patients.map((patient)=>(
                     <PatientCard key={patient.id} {...patient}/>
