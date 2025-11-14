@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 
+import com.hms.HMS.clients.Profile;
 import com.hms.HMS.dto.LoginDTO;
 import com.hms.HMS.dto.ResponseDTO;
 import com.hms.HMS.dto.UserDTO;
@@ -24,6 +25,7 @@ import com.hms.HMS.service.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -61,6 +63,11 @@ public class UserAPI {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(loginDTO.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
         return new ResponseEntity<>(jwt,HttpStatus.OK);
+    }
+
+    @GetMapping("/getProfile/{id}")
+    public ResponseEntity<Long> getProfile(@PathVariable Long id) throws HmsException{
+        return new ResponseEntity<>(userService.getProfile(id),HttpStatus.OK);
     }
 
     @GetMapping("/test")

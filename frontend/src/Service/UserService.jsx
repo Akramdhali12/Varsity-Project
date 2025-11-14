@@ -17,4 +17,12 @@ const loginUser = async (credentials) => {
     });
 };
 
-export { registerUser , loginUser };
+const getUserProfile = async (id) => {
+  return axiosInstance.get("/user/getProfile/"+ id)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+};
+
+export { registerUser , loginUser, getUserProfile };

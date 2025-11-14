@@ -8,16 +8,30 @@ import {
   IconTrash,
   IconArrowsLeftRight,
 } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { getUserProfile } from '../../Service/UserService';
+import useProtectedImage from "../Utility/Dropzone/useProtectedImage";
+
 
 const ProfileMenu = () => {
   const user=useSelector((state)=>state.user);
+  const [picId,setPicId] = useState(null);
+  useEffect(()=>{
+    if(!user) return;
+    getUserProfile(user.id).then((data)=>{
+      setPicId(data);
+    }).catch((error)=>{
+      console.log(error);
+    })
+  },[]);
+  const url = useProtectedImage(picId);
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
         <div className='flex items-center gap-3 cursor-pointer'>
         <span className='font-medium text-lg text-neutral-900'>{user.name}</span>
-        <Avatar variant='filled' src="/profile.png" size={40} alt="it's me" />
+        <Avatar variant='filled' src={url} size={40} alt="it's me" />
         </div>
       </Menu.Target>
 

@@ -30,13 +30,18 @@ public class DoctorAPI {
     private DoctorService doctorService;
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addPatient(@RequestBody DoctorDTO doctorDTO) throws HmsException {
+    public ResponseEntity<Long> addDoctor(@RequestBody DoctorDTO doctorDTO) throws HmsException {
         return new ResponseEntity<>(doctorService.addDoctor(doctorDTO),HttpStatus.CREATED);
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<DoctorDTO> getPatientById(@PathVariable Long id) throws HmsException{
+    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable Long id) throws HmsException{
         return new ResponseEntity<>(doctorService.getDoctorById(id),HttpStatus.OK);
+    }
+
+    @GetMapping("/getProfileId/{id}")
+    public ResponseEntity<Long> getProfileId(@PathVariable Long id) throws HmsException{
+        return new ResponseEntity<>(doctorService.getDoctorById(id).getProfilePictureId(),HttpStatus.OK);
     }
     
     @PutMapping("/update")

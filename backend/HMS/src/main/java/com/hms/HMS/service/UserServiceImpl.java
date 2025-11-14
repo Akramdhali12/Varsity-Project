@@ -4,6 +4,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hms.HMS.clients.Profile;
+import com.hms.HMS.clients.ProfileClient;
+// import com.hms.HMS.clients.ProfileClient;
+import com.hms.HMS.dto.Roles;
 import com.hms.HMS.dto.UserDTO;
 import com.hms.HMS.entity.User;
 import com.hms.HMS.exception.HmsException;
@@ -17,8 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    // @Autowired
+    // private ApiService apiService;
+
     @Autowired
-    private ApiService apiService;
+    private ProfileClient profileClient;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,7 +40,13 @@ public class UserServiceImpl implements UserService {
             throw new HmsException("USER_ALREADY_EXISTS");
         }
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        Long profileId = apiService.addProfile(userDTO).block();
+        // Long profileId = apiService.addProfile(userDTO).block();
+        Long profileId = null;
+        if(userDTO.getRole().equals(Roles.DOCTOR)){
+            profileId=profileClient.addDoctor(userDTO);
+        }else if(userDTO.getRole().equals(Roles.PATIENT)){
+            profileId=profileClient.addPatient(userDTO);
+        }
         System.out.println(profileId);
         userDTO.setProfileId(profileId);
         userRepository.save(userDTO.toEntity());
@@ -65,5 +78,16 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUser(String email) throws HmsException {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new HmsException("USER_NOT_FOUND")).toDTO();
+    }
+
+    @Override
+    public Long getProfile(Long id) throws HmsException {
+        User user = userRepository.findById(id).orElseThrow(()->new HmsException("USER_NOT_FOUND"));
+        if(user.getRole().equals(Roles.DOCTOR)){
+            return profileClient.getDoctor(id);
+        }else if(user.getRole().equals(Roles.PATIENT)){
+            return profileClient.getPatient(id);
+        }
+        throw new HmsException("INVALID_USER_ROLE");
     }
 }
