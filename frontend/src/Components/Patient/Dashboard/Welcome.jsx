@@ -22,17 +22,17 @@ const Welcome = () => {
             <div>
                 <div>WelCome Back</div>
                 <div className='text-3xl font-semibold text-blue-600'>{user.name}!</div>
-                <div className='text-sm'>Surgery, Cardiology</div>
+                <div className='text-sm'>A+, Dhaka</div>
             </div>
-            <Avatar src={url} alt="It's me" variant='filled' size={100}/>
+            <Avatar src={'/profile.png'} alt="It's me" variant='filled' size={100}/>
         </div>
         <div className='flex gap-5'>
           <div className='p-3 rounded-xl bg-violet-200'>
-            <div className='text-sm'>Appointments</div>
+            <div className='text-sm'>Visits</div>
             <div className='text-lg font-semibold text-violet-600'>120+</div>
           </div>
           <div className='p-3 rounded-xl bg-orange-200'>
-            <div className='text-sm'>Patients</div>
+            <div className='text-sm'>Medications</div>
             <div className='text-lg font-semibold text-orange-600'>80+</div>
           </div>
         </div>
