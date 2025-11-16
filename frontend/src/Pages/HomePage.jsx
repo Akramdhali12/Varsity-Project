@@ -58,19 +58,19 @@ function HomePage() {
           </div>
         </div>
       </main>
-      <footer className="bg-gray-900 text-white p-5 mt-5">
+      <footer className="bg-gray-900 text-white p-2 mt-5">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
           <div>
-            <h3 className="text-xl font-semibold mb-3">Hospital Name</h3>
-            <p className="text-gray-300">
+            <h3 className="text-xl font-semibold mb-1">Hospital Name</h3>
+            <p className="text-gray-300 text-sm">
               Your trusted partner in healthcare, providing quality service and
               care for all patients.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold mb-3">Location</h3>
-            <p className="text-gray-300">
+            <h3 className="text-xl font-semibold mb-1">Location</h3>
+            <p className="text-gray-300 text-sm">
               123 Health Street
               <br />
               Dhaka, Bangladesh
@@ -78,13 +78,13 @@ function HomePage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold mb-3">Contact Information</h3>
-            <p className="text-gray-300">Email: info@hospital.com</p>
-            <p className="text-gray-300">Phone: +880 1234-567890</p>
-            <p className="text-gray-300">Emergency: +880 9876-543210</p>
+            <h3 className="text-xl font-semibold mb-1">Contact Information</h3>
+            <p className="text-gray-300 text-sm">Email: info@hospital.com</p>
+            <p className="text-gray-300 text-sm">Phone: +880 1234-567890</p>
+            <p className="text-gray-300 text-sm">Emergency: +880 9876-543210</p>
           </div>
         </div>
-        <div className="text-center text-gray-400 mt-5 border-t border-gray-700 p-2">
+        <div className="text-center text-gray-400 m-2 border-t border-gray-700 p-2">
           © 2025 Hospital Name. All rights reserved.
         </div>
       </footer>
