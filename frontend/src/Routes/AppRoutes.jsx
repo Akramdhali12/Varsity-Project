@@ -22,11 +22,13 @@ import AdminDoctorPage from "../Pages/Admin/AdminDoctorPage";
 import AdminDashboardPage from "../Pages/Admin/AdminDashboardPage";
 import DoctorDashboardPage from "../Pages/Doctor/DoctorDashboardPage";
 import PatientDashboardPage from "../Pages/Patient/PatientDashboardPage";
+import HomePage from "../Pages/HomePage";
 
 const AppRoutes=()=> {
   return (
     <BrowserRouter>
            <Routes>
+            <Route path="/" element={<PublicRoute><HomePage/></PublicRoute>} />
             <Route path="/login" element={<PublicRoute><LoginPage/></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><RegisterPage/></PublicRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}>
