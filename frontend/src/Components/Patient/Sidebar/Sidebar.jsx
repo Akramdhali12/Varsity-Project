@@ -33,7 +33,7 @@ const Sidebar = () => {
     <div className="bg-gray-800 h-screen hide-scrollbar overflow-y-auto w-64 fixed flex flex-col gap-7 items-center">
       <div className="fixed z-[500] py-3 bg-gray-800 text-red-600 flex gap-1 items-center">
         <IconHeartbeat size={35} stroke={2.5} />
-        <span className="font-heading text-green-400 text-3xl">Pulse</span>
+        <span className="font-heading text-blue-400 text-3xl">HealthHub</span>
       </div>
     <div className="flex flex-col mt-20 gap-8 items-center">
       <div className="flex flex-col gap-1 items-center">

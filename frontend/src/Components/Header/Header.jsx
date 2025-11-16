@@ -16,7 +16,7 @@ function Header() {
     dispatch(removeUser());
   }
   return (
-    <div className='bg-green-200 w-full h-16 flex justify-between items-center px-4'>
+    <div className='bg-blue-200 w-full h-16 flex justify-between items-center px-4'>
       <ActionIcon variant="transparent" size="lg" aria-label="Settings">
       <IconLayoutSidebarLeftCollapseFilled style={{ width: '80%', height: '80%' }} stroke={1.5} />
       </ActionIcon>
