@@ -24,7 +24,7 @@ const links = [
     icon: <IconCalendarCheck stroke={1.5} />,
     url: "/doctor/appointments",
   },
-  { name: "pharmacy", icon: <IconPill stroke={1.5} />, url: "/doctor/pharmacy" },
+  // { name: "pharmacy", icon: <IconPill stroke={1.5} />, url: "/doctor/pharmacy" },
 ];
 
 const Sidebar = () => {
