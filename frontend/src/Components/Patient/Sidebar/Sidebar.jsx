@@ -7,6 +7,7 @@ import {
 import "../../../App.css";
 import { Avatar, Text } from "@mantine/core";
 import { useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 
 const links = [
   {
@@ -23,43 +24,64 @@ const links = [
 ];
 
 const Sidebar = () => {
-  const user=useSelector((state)=>state.user);
+  const user = useSelector((state) => state.user);
+  const location = useLocation(); // For active link detection
+
   return (
     <div className="flex">
-    <div className="w-64">
+      <div className="w-64"></div>
 
-    </div>
-    
-    <div className="bg-gray-800 h-screen hide-scrollbar overflow-y-auto w-64 fixed flex flex-col gap-7 items-center">
-      <div className="fixed z-[500] py-3 bg-gray-800 text-red-600 flex gap-1 items-center">
-        <IconHeartbeat size={35} stroke={2.5} />
-        <span className="font-heading text-blue-400 text-3xl">HealthHub</span>
-      </div>
-    <div className="flex flex-col mt-20 gap-8 items-center">
-      <div className="flex flex-col gap-1 items-center">
-        <div className="p-1 bg-white rounded-full shadow-lg">
-          <Avatar variant="filled" src="/profile.png" size="lg" alt="it's me" />
+      <div className="bg-gray-800 h-screen hide-scrollbar overflow-y-auto w-64 fixed flex flex-col gap-7 items-center">
+        <div className="fixed z-[500] py-3 bg-gray-800 text-red-600 flex gap-1 items-center">
+          <IconHeartbeat size={35} stroke={2.5} />
+          <span className="font-heading text-blue-400 text-3xl">HealthHub</span>
         </div>
-        <span className="font-medium text-white">{user.name}</span>
-        <Text size="xs" c="dimmed" className="text-white">
-          {user.role}
-        </Text>
-      </div>
-      <div>
-        {links.map((link) => (
-          <div
-            key={link.name} className="w-full">
-            <a
-              href={link.url}
-              className="group flex items-center gap-3 text-white hover:bg-green-300 hover:text-black px-4 py-2 rounded-md w-48" >
-              {link.icon}
-              <span className="font-medium text-white group-hover:text-black">{link.name}</span>
-            </a>
+
+        <div className="flex flex-col mt-20 gap-8 items-center">
+          <div className="flex flex-col gap-1 items-center">
+            <div className="p-1 bg-white rounded-full shadow-lg">
+              <Avatar variant="filled" src="/profile.png" size="lg" alt="it's me" />
+            </div>
+            <span className="font-medium text-white">{user.name}</span>
+            <Text size="xs" c="dimmed" className="text-white">
+              {user.role}
+            </Text>
           </div>
-        ))}
+
+          <div>
+            {links.map((link) => {
+              const isActive = location.pathname === link.url;
+
+              return (
+                <div key={link.name} className="w-full">
+                  <Link
+                    to={link.url}
+                    className={`group flex items-center gap-3 px-4 py-2 rounded-md w-48
+                      ${
+                        isActive
+                          ? "bg-green-300 text-black"
+                          : "text-white hover:bg-green-300 hover:text-black"
+                      }`}
+                  >
+                    <span className={`${isActive ? "text-black" : "text-white"}`}>
+                      {link.icon}
+                    </span>
+
+                    <span
+                      className={`font-medium ${
+                        isActive ? "text-black" : "text-white group-hover:text-black"
+                      }`}
+                    >
+                      {link.name}
+                    </span>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
       </div>
-    </div>
-    </div>
     </div>
   );
 };

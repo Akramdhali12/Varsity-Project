@@ -104,66 +104,109 @@ const Profile = () => {
         </Button>}
       </div>
       <Divider my="xl" />
+      <div className="mt-10">
+  {/* Header */}
+  <div className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-4 rounded-t-xl text-2xl font-semibold">
+    Personal Information
+  </div>
+
+  {/* Card Body */}
+  <div className="bg-white shadow-lg rounded-b-xl p-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      {/* Date of Birth */}
       <div>
-        <div className="text-2xl font-medium mb-5 text-neutral-900">
-          Personal Information
-        </div>
-        <Table striped stripedColor="red.1" withRowBorders={false}>
-          <Table.Tbody className="[&>tr]:!mb-3 [&_td]:!w-1/2">
-            <Table.Tr>
-              <Table.Td className="px-4">Date of Birth</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <DateInput {...form.getInputProps("dob")} placeholder="Date input"/>
-              </Table.Td>:
-              <Table.Td className="px-4">{formatDate(profile.dob)?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">Phone</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <NumberInput {...form.getInputProps("phone")} maxLength={11} clampBehavior="strict" placeholder="Phone Number" hideControls/>
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.phone?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">Address</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <TextInput {...form.getInputProps("address")}
-                  placeholder="Address"
-                />
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.address?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">License No</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <TextInput {...form.getInputProps("licenseNo")} placeholder="IdCard Number"/>
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.licenseNo?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">Specialization</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <Select {...form.getInputProps("specialization")} data={doctorSpecializations} placeholder="Specialization"/>
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.specialization?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">Department</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <Select {...form.getInputProps("department")} data={doctorDepartments} placeholder="Department"/>
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.department?? '-'}</Table.Td>}
-            </Table.Tr>
-            <Table.Tr>
-              <Table.Td className="px-4">Total Experience</Table.Td>
-              {editMode?<Table.Td className="px-4">
-                <NumberInput {...form.getInputProps("totalExp")} maxLength={2} max={50} clampBehavior="strict" placeholder="Total Experience" hideControls/>
-              </Table.Td>:
-              <Table.Td className="px-4">{profile.totalExp?? '-'} {profile.totalExp?'years':''}</Table.Td>}
-            </Table.Tr>
-          </Table.Tbody>
-        </Table>
+        <p className="text-blue-600 font-medium mb-1">Date of Birth</p>
+        {editMode ? (
+          <DateInput {...form.getInputProps("dob")} placeholder="Select date" />
+        ) : (
+          <p className="text-gray-800 font-semibold">{formatDate(profile.dob) ?? "-"}</p>
+        )}
       </div>
+
+      {/* Phone */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">Phone</p>
+        {editMode ? (
+          <NumberInput
+            {...form.getInputProps("phone")}
+            hideControls
+            placeholder="Phone number"
+          />
+        ) : (
+          <p className="text-gray-800 font-semibold">{profile.phone ?? "-"}</p>
+        )}
+      </div>
+
+      {/* Address */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">Address</p>
+        {editMode ? (
+          <TextInput {...form.getInputProps("address")} placeholder="Address" />
+        ) : (
+          <p className="text-gray-800 font-semibold">{profile.address ?? "-"}</p>
+        )}
+      </div>
+
+      {/* License No */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">License No</p>
+        {editMode ? (
+          <TextInput {...form.getInputProps("licenseNo")} placeholder="License Number" />
+        ) : (
+          <p className="text-gray-800 font-semibold">{profile.licenseNo ?? "-"}</p>
+        )}
+      </div>
+
+      {/* Specialization */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">Specialization</p>
+        {editMode ? (
+          <Select
+            {...form.getInputProps("specialization")}
+            data={doctorSpecializations}
+            placeholder="Select specialization"
+          />
+        ) : (
+          <p className="text-gray-800 font-semibold">{profile.specialization ?? "-"}</p>
+        )}
+      </div>
+
+      {/* Department */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">Department</p>
+        {editMode ? (
+          <Select
+            {...form.getInputProps("department")}
+            data={doctorDepartments}
+            placeholder="Select department"
+          />
+        ) : (
+          <p className="text-gray-800 font-semibold">{profile.department ?? "-"}</p>
+        )}
+      </div>
+
+      {/* Total Experience */}
+      <div>
+        <p className="text-blue-600 font-medium mb-1">Total Experience</p>
+        {editMode ? (
+          <NumberInput
+            {...form.getInputProps("totalExp")}
+            hideControls
+            placeholder="Years of experience"
+            max={50}
+          />
+        ) : (
+          <p className="text-gray-800 font-semibold">
+            {profile.totalExp ?? "-"} {profile.totalExp ? "years" : ""}
+          </p>
+        )}
+      </div>
+
+    </div>
+  </div>
+</div>
+
       <Modal centered opened={opened} onClose={close} title={<span className="text-xl font-medium">Upload Profile Picture</span>}>
         {/* Modal content */}
       </Modal>

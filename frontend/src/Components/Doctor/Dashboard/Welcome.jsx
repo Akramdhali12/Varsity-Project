@@ -24,7 +24,7 @@ const Welcome = () => {
                 <div className='text-3xl font-semibold text-blue-600'>{user.name}!</div>
                 <div className='text-sm'>Surgery, Cardiology</div>
             </div>
-            <Avatar src={url} alt="It's me" variant='filled' size={100}/>
+            <Avatar src='/profile.png' alt="It's me" variant='filled' size={100}/>
         </div>
         <div className='flex gap-5'>
           <div className='p-3 rounded-xl bg-violet-200'>
