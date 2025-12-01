@@ -10,4 +10,5 @@ public interface MedicineService {
     public List<MedicineDTO> saveAllMedicines(List<MedicineDTO> requestList);
 
     public List<MedicineDTO> getAllMedicinesByPrescriptionId(Long prescriptionId);
+    public List<MedicineDTO> getMedicinesByPrescriptionIds(List<Long> prescriptionId);
 }

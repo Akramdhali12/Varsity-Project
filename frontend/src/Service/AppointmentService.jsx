@@ -81,9 +81,75 @@ const getMedicinesByPrescriptionId = async(prescriptionId)=>{
       .catch((error)=>{throw error;})
 }
 
+const countAppointmentsByPatient = async (patientId) => {
+  return axiosInstance.get("/appointment/countByPatient/"+ patientId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const countAppointmentsByDoctor = async (doctorId) => {
+  return axiosInstance.get("/appointment/countByDoctor/"+ doctorId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const countAllAppointments = async () => {
+  return axiosInstance.get("/appointment/visitCount")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+  }
+
+const countReasonsByPatient = async (patientId) => {
+  return axiosInstance.get("/appointment/countReasonsByPatient/"+ patientId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const countReasonsByDoctor = async (doctorId) => {
+  return axiosInstance.get("/appointment/countReasonsByDoctor/"+ doctorId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const countAllReasons = async () => {
+  return axiosInstance.get("/appointment/countReasons")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+  }
+
+const getMedicinesConsumedByPatient = async (patientId) => {
+  return axiosInstance.get("/appointment/getMedicinesByPatient/"+ patientId)
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
+const getTodaysAppointments = async () => {
+  return axiosInstance.get("/appointment/today")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+
 export { scheduleAppointment, cancelAppointment,
    getAppointment, getAppointmentDetails,
    getAppointmentsByPatient, getAppointmentsByDoctor, createAppointmentReport,
    isReportExists,getReportsByPatientId,getPrescriptionsByPatientId,getAllPrescriptions,
-  getMedicinesByPrescriptionId };
+  getMedicinesByPrescriptionId, countAppointmentsByPatient,countAppointmentsByDoctor,
+   countAllAppointments, countReasonsByPatient, countReasonsByDoctor, countAllReasons,
+  getMedicinesConsumedByPatient, getTodaysAppointments };
 

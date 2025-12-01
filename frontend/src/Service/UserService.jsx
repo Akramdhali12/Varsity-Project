@@ -25,4 +25,11 @@ const getUserProfile = async (id) => {
     });
 };
 
-export { registerUser , loginUser, getUserProfile };
+const getRegistrationCounts = async () => {
+  return axiosInstance.get("/user/getRegistrationCounts")
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error;
+    });
+}
+export { registerUser , loginUser, getUserProfile, getRegistrationCounts };

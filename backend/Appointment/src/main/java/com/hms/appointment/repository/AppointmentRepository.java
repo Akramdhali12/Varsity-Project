@@ -1,20 +1,46 @@
 package com.hms.appointment.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.hms.appointment.dto.AppointmentDetails;
+import com.hms.appointment.dto.MonthlyVisitDTO;
+import com.hms.appointment.dto.ReasonCountDTO;
 import com.hms.appointment.entity.Appointment;
 
 public interface AppointmentRepository extends CrudRepository<Appointment, Long> {
 
     @Query("SELECT new com.hms.appointment.dto.AppointmentDetails(a.id, a.patientId,null,null,null, a.doctorId,null, a.appointmentTime, a.status,a.reason,a.notes) "
-         + "FROM Appointment a WHERE a.patientId =patientId")
+         + "FROM Appointment a WHERE a.patientId = :patientId")
     List<AppointmentDetails> findAllByPatientId(Long patientId);
 
     @Query("SELECT new com.hms.appointment.dto.AppointmentDetails(a.id, a.patientId,null,null,null, a.doctorId,null, a.appointmentTime, a.status,a.reason,a.notes) "
-         + "FROM Appointment a WHERE a.doctorId =doctorId")
+         + "FROM Appointment a WHERE a.doctorId = :doctorId")
     List<AppointmentDetails> findAllByDoctorId(Long doctorId);
+
+    @Query("SELECT new com.hms.appointment.dto.MonthlyVisitDTO(CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String), COUNT(a)) from Appointment a WHERE a.patientId= :patientId "
+    + "AND YEAR(a.appointmentTime)=YEAR(CURRENT_DATE) GROUP BY FUNCTION('MONTH', a.appointmentTime),CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String) ORDER BY FUNCTION('MONTH',a.appointmentTime)")
+    List<MonthlyVisitDTO> countCurrentYearVisitsByPatient(Long patientId);
+
+    @Query("SELECT new com.hms.appointment.dto.MonthlyVisitDTO(CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String), COUNT(a)) from Appointment a WHERE a.doctorId= :doctorId "
+    + "AND YEAR(a.appointmentTime)=YEAR(CURRENT_DATE) GROUP BY FUNCTION('MONTH', a.appointmentTime),CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String) ORDER BY FUNCTION('MONTH',a.appointmentTime)")
+    List<MonthlyVisitDTO> countCurrentYearVisitsByDoctor(Long doctorId);
+
+    @Query("SELECT new com.hms.appointment.dto.MonthlyVisitDTO(CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String), COUNT(a)) from Appointment a WHERE "
+    + "YEAR(a.appointmentTime)=YEAR(CURRENT_DATE) GROUP BY FUNCTION('MONTH', a.appointmentTime),CAST(FUNCTION('MONTHNAME',a.appointmentTime) as String) ORDER BY FUNCTION('MONTH',a.appointmentTime)")
+    List<MonthlyVisitDTO> countCurrentYearVisits();
+
+    @Query("SELECT new com.hms.appointment.dto.ReasonCountDTO(a.reason,COUNT(a)) FROM Appointment a WHERE a.patientId=:patientId GROUP BY a.reason")
+    List<ReasonCountDTO> countReasonsByPatientId(Long patientId);
+    
+    @Query("SELECT new com.hms.appointment.dto.ReasonCountDTO(a.reason,COUNT(a)) FROM Appointment a WHERE a.doctorId=:doctorId GROUP BY a.reason")
+    List<ReasonCountDTO> countReasonsByDoctorId(Long doctorId);
+
+    @Query("SELECT new com.hms.appointment.dto.ReasonCountDTO(a.reason,COUNT(a)) FROM Appointment a GROUP BY a.reason")
+    List<ReasonCountDTO> countReasons();
+
+    List<Appointment> findByAppointmentTimeBetween(LocalDateTime startOfDay,LocalDateTime endOfDay);
 }

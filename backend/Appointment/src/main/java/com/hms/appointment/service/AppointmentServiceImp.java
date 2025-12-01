@@ -1,5 +1,8 @@
 package com.hms.appointment.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,9 @@ import com.hms.appointment.dto.AppointmentDetails;
 import com.hms.appointment.clients.ProfileClient;
 import com.hms.appointment.dto.AppointmentDTO;
 import com.hms.appointment.dto.DoctorDTO;
+import com.hms.appointment.dto.MonthlyVisitDTO;
 import com.hms.appointment.dto.PatientDTO;
+import com.hms.appointment.dto.ReasonCountDTO;
 import com.hms.appointment.dto.Status;
 import com.hms.appointment.entity.Appointment;
 import com.hms.appointment.exception.HmsException;
@@ -101,5 +106,50 @@ public class AppointmentServiceImp implements AppointmentService {
                 appointment.setPatientPhone(patientDTO.getPhone());
             return appointment;
         }).toList();
+    }
+
+    @Override
+    public List<MonthlyVisitDTO> getAppointmentCountByPatient(Long patientId) throws HmsException {
+        return appointmentRepository.countCurrentYearVisitsByPatient(patientId);
+    }
+
+    @Override
+    public List<ReasonCountDTO> getReasonCountByPatient(Long patientId) {
+        return appointmentRepository.countReasonsByPatientId(patientId);
+    }
+
+    @Override
+    public List<MonthlyVisitDTO> getAppointmentCountByDoctor(Long doctorId) throws HmsException {
+        return appointmentRepository.countCurrentYearVisitsByDoctor(doctorId);
+    }
+
+    @Override
+    public List<MonthlyVisitDTO> getAppointmentCounts() throws HmsException {
+        return appointmentRepository.countCurrentYearVisits();
+    }
+
+    @Override
+    public List<ReasonCountDTO> getReasonCountByDoctor(Long doctorId) {
+        return appointmentRepository.countReasonsByDoctorId(doctorId);
+    }
+
+    @Override
+    public List<ReasonCountDTO> getReasonCount() {
+        return appointmentRepository.countReasons();
+    }
+
+    @Override
+    public List<AppointmentDetails> getTodaysAppointments() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+        return appointmentRepository.findByAppointmentTimeBetween(startOfDay, endOfDay)
+            .stream().map(appointment -> {
+                DoctorDTO doctorDTO = profileClient.getDoctorById(appointment.getDoctorId());
+                PatientDTO patientDTO = profileClient.getPatientById(appointment.getPatientId());
+                return new AppointmentDetails(appointment.getId(),appointment.getPatientId(),patientDTO.getName(),
+                    patientDTO.getEmail(),patientDTO.getPhone(),appointment.getDoctorId(),doctorDTO.getName(),
+                    appointment.getAppointmentTime(),appointment.getStatus(),appointment.getReason(),appointment.getNotes());
+            }).toList();
     }
 }

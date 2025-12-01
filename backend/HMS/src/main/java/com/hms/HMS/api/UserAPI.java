@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 
 import com.hms.HMS.clients.Profile;
 import com.hms.HMS.dto.LoginDTO;
+import com.hms.HMS.dto.RegistrationCountsDTO;
 import com.hms.HMS.dto.ResponseDTO;
 import com.hms.HMS.dto.UserDTO;
 import com.hms.HMS.exception.HmsException;
@@ -68,6 +69,11 @@ public class UserAPI {
     @GetMapping("/getProfile/{id}")
     public ResponseEntity<Long> getProfile(@PathVariable Long id) throws HmsException{
         return new ResponseEntity<>(userService.getProfile(id),HttpStatus.OK);
+    }
+
+    @GetMapping("getRegistrationCounts")
+    public ResponseEntity<RegistrationCountsDTO> getMonthlyRegistrationCounts() {
+        return new ResponseEntity<>(userService.getMonthlyRegistrationCounts(), HttpStatus.OK);
     }
 
     @GetMapping("/test")

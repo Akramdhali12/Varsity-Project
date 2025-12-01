@@ -20,6 +20,14 @@ const formatDateWithTime=(dateString)=> {
   });
 }
 
+const extractTimeIn12HourFormat=(dateString)=>{
+  if (!dateString) return undefined;
+  const date = new Date(dateString);
+  return date.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  });
+}
 
-
-export {formatDate,formatDateWithTime}
+export {formatDate,formatDateWithTime,extractTimeIn12HourFormat}

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.hms.appointment.clients.ProfileClient;
 import com.hms.appointment.dto.DoctorName;
+import com.hms.appointment.dto.MedicineDTO;
 import com.hms.appointment.dto.PrescriptionDTO;
 import com.hms.appointment.dto.PrescriptionDetails;
 import com.hms.appointment.entity.Prescription;
@@ -123,5 +124,11 @@ public class PrescriptionServiceImpl implements PrescriptionService {
             }
         });
         return prescriptionDetails;
+    }
+
+    @Override
+    public List<MedicineDTO> getMedicineByPatientId(Long patientId) throws HmsException {
+        List<Long> pIds = prescriptionRepository.findAllPreIdsByPatient(patientId);
+        return medicineService.getMedicinesByPrescriptionIds(pIds);
     }
 }

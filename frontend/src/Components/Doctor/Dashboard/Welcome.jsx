@@ -3,10 +3,12 @@ import React, { useEffect, useState } from 'react'
 import {useSelector} from 'react-redux';
 import { getUserProfile } from '../../../Service/UserService';
 import useProtectedImage from '../../Utility/Dropzone/useProtectedImage';
+import { getdoctor } from '../../../Service/DoctorProfileService';
 
 const Welcome = () => {
     const user = useSelector((state)=>state.user);
     const [picId,setPicId] = useState(null);
+    const [doctorInfo,setDoctorInfo] = useState({});
   useEffect(()=>{
     if(!user) return;
     getUserProfile(user.id).then((data)=>{
@@ -14,6 +16,12 @@ const Welcome = () => {
     }).catch((error)=>{
       console.log(error);
     })
+
+    getdoctor(user.profileId).then((data)=>{
+      setDoctorInfo(data);
+    }).catch((error)=>{
+      console.log(error);
+    });
   },[]);
   const url = useProtectedImage(picId);
   return (
@@ -22,7 +30,7 @@ const Welcome = () => {
             <div>
                 <div>WelCome Back</div>
                 <div className='text-3xl font-semibold text-blue-600'>{user.name}!</div>
-                <div className='text-sm'>Surgery, Cardiology</div>
+                <div className='text-sm'>{doctorInfo.specialization}, {doctorInfo.department}</div>
             </div>
             <Avatar src='/profile.png' alt="It's me" variant='filled' size={100}/>
         </div>
