@@ -82,7 +82,7 @@ public class AppointmentAPI {
         return new ResponseEntity<>(appointmentService.getAppointmentCountByPatient(patientId),HttpStatus.OK);
     }
 
-    @GetMapping("/countByDoctor/{doctortId}")
+    @GetMapping("/countByDoctor/{doctorId}")
     public ResponseEntity<List<MonthlyVisitDTO>> getAppointmentCountByDoctorId(@PathVariable Long doctorId) throws HmsException{
         return new ResponseEntity<>(appointmentService.getAppointmentCountByDoctor(doctorId),HttpStatus.OK);
     }

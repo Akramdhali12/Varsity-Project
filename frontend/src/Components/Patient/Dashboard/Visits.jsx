@@ -1,21 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { AreaChart } from '@mantine/charts';
+import { useSelector } from 'react-redux';
+import { countAppointmentsByPatient } from '../../../Service/AppointmentService';
 
 const Visits = () => {
-  const data = [
-  { date: 'Jan', Visits: 54 },
-  { date: 'Feb', Visits: 62 },
-  { date: 'Mar', Visits: 71 },
-  { date: 'Apr', Visits: 48 },
-  { date: 'May', Visits: 85 },
-  { date: 'Jun', Visits: 67 },
-  { date: 'Jul', Visits: 73 },
-  { date: 'Aug', Visits: 59 },
-  { date: 'Sep', Visits: 64 },
-  { date: 'Oct', Visits: 78 },
-  { date: 'Nov', Visits: 69 },
-  { date: 'Dec', Visits: 91 },
-];
+  const [appointments,setAppointments]=useState([]);
+  const user = useSelector((state)=>state.user);
+  useEffect(()=>{
+    countAppointmentsByPatient(user.profileId).then((data)=>{
+      setAppointments(data);
+    }).catch((error)=>{
+      console.log(error);
+    });
+  },[]);
 const getSum = (data,key)=>{
   return data.reduce((sum,item)=>sum+item[key],0);
 }
@@ -26,13 +23,13 @@ const getSum = (data,key)=>{
           <div className='font-semibold'>Visits</div>
           <div className='text-xs text-gray-500'>{new Date().getFullYear()}</div>
         </div>
-        <div className='text-2xl font-bold text-violet-500'>{getSum(data,"Visits")}</div>
+        <div className='text-2xl font-bold text-violet-500'>{getSum(appointments,"count")}</div>
       </div>
       <AreaChart
                 h={200}
-                data={data}
-                dataKey="date"
-                series={[{ name: 'Visits', color: 'violet' }]}
+                data={appointments}
+                dataKey="month"
+                series={[{ name: 'count', color: 'violet' }]}
                 strokeWidth={4}
                 curveType="bump"
                 // tickLine="none"
