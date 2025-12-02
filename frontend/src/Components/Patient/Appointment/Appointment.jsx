@@ -15,7 +15,7 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { IconEdit, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconEye, IconMedicineSyrup, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { getdoctorDropdown } from "../../../Service/DoctorProfileService";
 import { DateTimePicker } from "@mantine/dates";
@@ -43,6 +43,7 @@ const Appointment = () => {
   const user = useSelector((state) => state.user);
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(false);
+  const [medicineData,setMedicineData] = useState([]);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
 
   const getSeverity = (status) => {
@@ -212,7 +213,7 @@ const Appointment = () => {
     return (
       <div className="flex gap-2">
         <ActionIcon>
-          <IconEdit size={16} stroke={1.5} />
+          <IconMedicineSyrup size={16} stroke={1.5} />
         </ActionIcon>
         <ActionIcon color="red" onClick={() => handleDelete(rowData)}>
           <IconTrash size={16} stroke={1.5} />
