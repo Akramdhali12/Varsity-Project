@@ -14,6 +14,10 @@ import {
   Text,
   Textarea,
   TextInput,
+  Card,             // Added for prescription cards
+  Divider,          // Added for layout
+  Grid,             // Added for layout
+  Title  
 } from "@mantine/core";
 import { IconEdit, IconEye, IconMedicineSyrup, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
@@ -25,6 +29,7 @@ import { useSelector } from "react-redux";
 import {
   cancelAppointment,
   getAppointmentsByPatient,
+  getPrescriptionsByPatientId,
   scheduleAppointment,
 } from "../../../Service/AppointmentService";
 import {
@@ -43,8 +48,11 @@ const Appointment = () => {
   const user = useSelector((state) => state.user);
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(false);
-  const [medicineData,setMedicineData] = useState([]);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+
+  // **New state for prescriptions**
+  const [medicineData, setMedicineData] = useState([]); 
+  const [openedPrescriptions, { open: openPrescriptions, close: closePrescriptions }] = useDisclosure(false);
 
   const getSeverity = (status) => {
     switch (status) {
@@ -209,10 +217,25 @@ const Appointment = () => {
     });
   };
 
+  // **New handler to view prescriptions for an appointment**
+  const handleViewPrescription = (rowData) => {
+    getPrescriptionsByPatientId(user.profileId)
+      .then((res) => {
+        // Find the prescription that matches this appointment ID
+        const prescription = res.find((p) => p.appointmentId === rowData.id);
+        setMedicineData(prescription ? prescription.medicines : []);
+        openPrescriptions();
+      })
+      .catch((err) => {
+        console.error("Error fetching prescriptions:", err);
+      });
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex gap-2">
-        <ActionIcon>
+        {/* **New icon button to view prescription** */}
+        <ActionIcon onClick={() => handleViewPrescription(rowData)}>
           <IconMedicineSyrup size={16} stroke={1.5} />
         </ActionIcon>
         <ActionIcon color="red" onClick={() => handleDelete(rowData)}>
@@ -336,6 +359,48 @@ const Appointment = () => {
           filter
         />
       </DataTable>
+      {/* **Modal to show medicines for the selected appointment** */}
+      <Modal
+        opened={openedPrescriptions}
+        size="xl"
+        onClose={closePrescriptions}
+        title="Medicines"
+        centered
+      >
+        <div className="grid grid-cols-2 gap-5">
+          {medicineData.map((data, index) => (
+            <Card key={index} shadow="md" radius="lg" withBorder padding="lg">
+              <Title order={4} mb="sm">
+                {data.name} ({data.type})
+              </Title>
+              <Divider my="xs" />
+              <Grid gap="xs">
+                <Grid.Col span={6}>
+                  <Text size="sm" fw={500}>Dosage:</Text>
+                  <Text>{data.dosage}</Text>
+                </Grid.Col>
+                <Grid.Col span={6}>
+                  <Text size="sm" fw={500}>Frequency:</Text>
+                  <Text>{data.frequency}</Text>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Text size="sm" fw={500}>Duration:</Text>
+                  <Text>{data.duration}</Text>
+                </Grid.Col>
+                <Grid.Col span={12}>
+                  <Text size="sm" fw={500}>Advice:</Text>
+                  <Text>{data.advice}</Text>
+                </Grid.Col>
+              </Grid>
+            </Card>
+          ))}
+        </div>
+        {medicineData.length === 0 && (
+          <Text color="dimmed" size="sm" mt="md">
+            No medicines prescribed for this appointment
+          </Text>
+        )}
+      </Modal>
       <Modal
         opened={opened}
         size="lg"
