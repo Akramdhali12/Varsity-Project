@@ -18,7 +18,7 @@ const links = [
     url: "/doctor/dashboard",
   },
   { name: "Profile", icon: <IconUser stroke={1.5} />, url: "/doctor/profile" },
-  { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/doctor/patient" },
+  // { name: "Patients", icon: <IconBed stroke={1.5} />, url: "/doctor/patient" },
   {
     name: "Appointments",
     icon: <IconCalendarCheck stroke={1.5} />,

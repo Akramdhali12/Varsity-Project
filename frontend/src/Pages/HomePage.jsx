@@ -5,7 +5,7 @@ function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Hospital Management System</h1>
+        <h1 className="text-2xl font-bold">HealthHub</h1>
         <div className="space-x-4">
           <Link
             to="/login"
@@ -61,7 +61,7 @@ function HomePage() {
       <footer className="bg-gray-900 text-white p-2 mt-5">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 text-left">
           <div>
-            <h3 className="text-xl font-semibold mb-1">Hospital Name</h3>
+            <h3 className="text-xl font-semibold mb-1">HealthHub</h3>
             <p className="text-gray-300 text-sm">
               Your trusted partner in healthcare, providing quality service and
               care for all patients.
@@ -85,7 +85,7 @@ function HomePage() {
           </div>
         </div>
         <div className="text-center text-gray-400 m-2 border-t border-gray-700 p-2">
-          © 2025 Hospital Name. All rights reserved.
+          © 2025 HealthHub. All rights reserved.
         </div>
       </footer>
     </div>
