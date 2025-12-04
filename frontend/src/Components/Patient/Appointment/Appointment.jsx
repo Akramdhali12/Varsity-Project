@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { ProgressBar } from "primereact/progressbar";
 import { Tag } from "primereact/tag";
 import {
   ActionIcon,
@@ -21,7 +20,7 @@ import {
 } from "@mantine/core";
 import { IconEdit, IconEye, IconMedicineSyrup, IconPlus, IconSearch, IconTrash } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { getdoctorDropdown } from "../../../Service/DoctorProfileService";
+// import { getdoctorDropdown } from "../../../Service/DoctorProfileService";
 import { DateTimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { appointmentReasons } from "../../../Data/DropDownData";
@@ -39,16 +38,22 @@ import {
 import { formatDateWithTime } from "../../../Utility/DateUtility";
 import { modals } from "@mantine/modals";
 import { Toolbar } from "primereact/toolbar";
+import { getAllDoctors } from '../../../Service/DoctorProfileService';  // new import
 
 const Appointment = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const [doctors, setDoctors] = useState([]);
+  // const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [tab, setTab] = useState("Today");
   const user = useSelector((state) => state.user);
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(false);
   const [globalFilterValue, setGlobalFilterValue] = useState("");
+
+  const [allDoctors, setAllDoctors] = useState([]);       // Full list of doctors
+  const [specializations, setSpecializations] = useState([]); // Unique specialization options
+  const [departments, setDepartments] = useState([]);         // Unique department options
+
 
   // **New state for prescriptions**
   const [medicineData, setMedicineData] = useState([]); 
@@ -72,6 +77,14 @@ const Appointment = () => {
   const initFilters = () => {
     setFilters({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      docSpecialization: {
+  operator: FilterOperator.AND,
+  constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+},
+docDepartment: {
+  operator: FilterOperator.AND,
+  constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+},
       doctorName: {
         operator: FilterOperator.AND,
         constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
@@ -113,16 +126,29 @@ const Appointment = () => {
     initFilters();
     fetchData();
 
-    getdoctorDropdown()
+    // getdoctorDropdown()
+    //   .then((data) => {
+    //     console.log(data);
+    //     setDoctors(
+    //       data.map((doctor) => ({ value: "" + doctor.id, label: doctor.name }))
+    //     );
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching doctor dropdown data:", error);
+    //   });
+    // Fetch all doctors from profileMS
+    getAllDoctors()
       .then((data) => {
-        console.log(data);
-        setDoctors(
-          data.map((doctor) => ({ value: "" + doctor.id, label: doctor.name }))
-        );
+        setAllDoctors(data);
+
+        // make sure values are strings
+        const specs = [...new Set(data.map((d) => String(d.specialization)))];
+        const depts = [...new Set(data.map((d) => String(d.department)))];
+
+        setSpecializations(specs.map((s) => ({ value: s, label: s })));
+        setDepartments(depts.map((d) => ({ value: d, label: d })));
       })
-      .catch((error) => {
-        console.error("Error fetching doctor dropdown data:", error);
-      });
+      .catch((err) => console.error("Error loading doctors", err));
   }, []);
 
   const onGlobalFilterChange = (e) => {
@@ -132,6 +158,8 @@ const Appointment = () => {
   };
   const form = useForm({
     initialValues: {
+      specialization: "",  // <-- new field
+      department: "",
       doctorId: "",
       patientId: user.profileId,
       appointmentTime: new Date(),
@@ -147,23 +175,23 @@ const Appointment = () => {
     },
   });
 
-  const renderHeader = () => (
-    <div className="flex justify-between items-center">
-      <Button leftSection={<IconPlus />} variant="filled" onClick={open}>
-        Schedule Appointment
-      </Button>
+  // const renderHeader = () => (
+  //   <div className="flex justify-between items-center">
+  //     <Button leftSection={<IconPlus />} variant="filled" onClick={open}>
+  //       Schedule Appointment
+  //     </Button>
 
-      <TextInput
-        leftSection={<IconSearch />}
-        fw={500}
-        value={globalFilterValue}
-        onChange={onGlobalFilterChange}
-        placeholder="Keyword Search"
-      />
-    </div>
-  );
+  //     <TextInput
+  //       leftSection={<IconSearch />}
+  //       fw={500}
+  //       value={globalFilterValue}
+  //       onChange={onGlobalFilterChange}
+  //       placeholder="Keyword Search"
+  //     />
+  //   </div>
+  // );
 
-  const header = renderHeader();
+  // const header = renderHeader();
   const handleSubmit = (values) => {
     setLoading(true);
     scheduleAppointment(values)
@@ -297,6 +325,22 @@ const Appointment = () => {
     return true;
   });
 
+const getDoctorOptions = () => {
+    return allDoctors
+      .filter((d) => {
+        return (
+          (!form.values.specialization ||
+            d.specialization === form.values.specialization) &&
+          (!form.values.department ||
+            d.department === form.values.department)
+        );
+      })
+      .map((d) => ({
+        value: String(d.id),
+        label: d.name,
+      }));
+  };
+
   return (
     <div className="card">
       <Toolbar
@@ -314,7 +358,8 @@ const Appointment = () => {
         loading={loading}
         dataKey="id"
         filters={filters}
-        globalFilterFields={["doctorName", "reason", "notes", "status"]}
+        globalFilterFields={["doctorName", "reason", "notes", "status","docSpecialization",
+          "docDepartment",]}
         emptyMessage="No appointment found."
         onFilter={(e) => setFilters(e.filters)}
       >
@@ -419,13 +464,46 @@ const Appointment = () => {
           onSubmit={form.onSubmit(handleSubmit)}
           className="grid grid-cols-1 gap-3"
         >
+          {/* Specialization Select */}
+        <Grid>
+  <Grid.Col span={6}>
+    <Select
+      label="Specialist"
+      data={specializations}
+      value={form.values.specialization}
+      onChange={(v) => form.setFieldValue("specialization", v || "")}
+      clearable
+      placeholder="choice specialist"
+    />
+  </Grid.Col>
+
+  <Grid.Col span={6}>
+    <Select
+      label="Department"
+      data={departments}
+      value={form.values.department}
+      onChange={(v) => form.setFieldValue("department", v || "")}
+      clearable
+      placeholder="choice department"
+    />
+  </Grid.Col>
+</Grid>
+
           <Select
+            label="Doctor"
+            data={getDoctorOptions()}
+            value={form.values.doctorId}
+            onChange={(v) => form.setFieldValue("doctorId", v || "")}
+            clearable
+            placeholder="Select Doctor"
+          />
+          {/* <Select
             {...form.getInputProps("doctorId")}
             withAsterisk
             data={doctors}
             label="Doctor"
             placeholder="Select Doctor"
-          />
+          /> */}
           <DateTimePicker
             minDate={new Date()}
             {...form.getInputProps("appointmentTime")}
