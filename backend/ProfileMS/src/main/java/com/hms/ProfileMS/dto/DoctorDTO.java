@@ -1,6 +1,8 @@
 package com.hms.ProfileMS.dto;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 import com.hms.ProfileMS.entity.Doctor;
 
@@ -24,8 +26,13 @@ public class DoctorDTO {
     private String department;
     private Integer totalExp;
 
+    private LocalTime startTime;
+private LocalTime endTime;
+private List<String> availableDays;
+
+
     public Doctor toEntity() {
         return new Doctor(this.id, this.name, this.email, this.dob,this.profilePictureId, this.phone, this.address, 
-        this.licenseNo, this.specialization, this.department, this.totalExp);
+        this.licenseNo, this.specialization, this.department, this.totalExp, this.startTime, this.endTime, this.availableDays);
     }
 }
