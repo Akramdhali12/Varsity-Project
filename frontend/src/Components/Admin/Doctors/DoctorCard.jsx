@@ -6,6 +6,7 @@ import {
   IconMapPin,
   IconPhone,
 } from "@tabler/icons-react";
+import useProtectedImage from "../../Utility/Dropzone/useProtectedImage";
 
 const DoctorCard = ({
   name,
@@ -16,7 +17,10 @@ const DoctorCard = ({
   totalExp,
   specialization,
   department,
+  profilePictureId,
 }) => {
+  // Load secure doctor image
+  const url = useProtectedImage(profilePictureId);
   return (
     <div className="relative bg-gradient-to-br from-green-50 via-white to-blue-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 group hover:-translate-y-1">
       {/* Floating gradient strip */}
@@ -24,7 +28,7 @@ const DoctorCard = ({
 
       {/* Top Section */}
       <div className="flex items-center gap-4 mt-2">
-        <Avatar name={name} color='initials' variant='filled'/>
+        <Avatar src={url || null} name={name} color='initials' variant='filled'/>
 
         <div className="flex flex-col">
           <div className="text-lg font-bold text-gray-800">{name}</div>

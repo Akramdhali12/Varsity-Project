@@ -2,6 +2,7 @@ import { Avatar, Badge } from "@mantine/core";
 import { formatDate } from "../../../Utility/DateUtility";
 import React from "react";
 import { IconPhone, IconMapPin, IconDroplet, IconMail, IconHeart } from "@tabler/icons-react";
+import useProtectedImage from "../../Utility/Dropzone/useProtectedImage";
 
 const PatientCard = ({
   name,
@@ -12,7 +13,10 @@ const PatientCard = ({
   address,
   aadharNo,
   bloodGroup,
+  profilePictureId,
 }) => {
+  // Load secure patient image
+  const url = useProtectedImage(profilePictureId);
   return (
     <div className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer p-6 group hover:-translate-y-1">
       {/* Top gradient bar */}
@@ -20,7 +24,7 @@ const PatientCard = ({
 
       {/* Header section */}
       <div className="flex items-center gap-4 mt-2">
-        <Avatar name={name} color='initials' variant='filled'/>
+        <Avatar src={url || null} name={name} color='initials' variant='filled'/>
 
         <div>
           <div className="text-lg font-semibold text-gray-800">{name}</div>
