@@ -58,7 +58,7 @@ const RegisterPage = () => {
         {/* Left Section with Image + Message */}
         <div className="w-1/3 bg-blue-400 flex flex-col items-center justify-center p-6 text-white">
           <img
-            src='Male-doctor.jpg'
+            src='/polash_Pic.png'
             alt="Doctor"
             className="w-[60%] rounded-xl shadow-lg mb-6"
           />

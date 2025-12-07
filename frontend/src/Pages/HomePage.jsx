@@ -51,7 +51,7 @@ function HomePage() {
           {/* Right Section - Image */}
           <div className="flex justify-center">
             <img
-              src="/doctor.jpg"
+              src="/polash_Pic.png"
               alt="Doctor"
               className="rounded-2xl shadow-lg w-80 md:w-96 border-4 border-blue-200"
             />
