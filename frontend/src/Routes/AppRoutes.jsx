@@ -22,13 +22,20 @@ import AdminDoctorPage from "../Pages/Admin/AdminDoctorPage";
 import AdminDashboardPage from "../Pages/Admin/AdminDashboardPage";
 import DoctorDashboardPage from "../Pages/Doctor/DoctorDashboardPage";
 import PatientDashboardPage from "../Pages/Patient/PatientDashboardPage";
+import LayoutPage from "../Pages/LayoutPage";
 import HomePage from "../Pages/HomePage";
+import AboutPage from "../Pages/AboutPage";
+import ContactPage from "../Pages/ContactPage";
 
 const AppRoutes=()=> {
   return (
     <BrowserRouter>
            <Routes>
-            <Route path="/" element={<PublicRoute><HomePage/></PublicRoute>} />
+            <Route path="/" element={<PublicRoute><LayoutPage/></PublicRoute>}>
+              <Route index element={<HomePage/>} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="contact" element={<ContactPage />} />
+            </Route>
             <Route path="/login" element={<PublicRoute><LoginPage/></PublicRoute>} />
             <Route path="/register" element={<PublicRoute><RegisterPage/></PublicRoute>} />
             <Route path="/admin" element={<ProtectedRoute><AdminDashboard/></ProtectedRoute>}>
