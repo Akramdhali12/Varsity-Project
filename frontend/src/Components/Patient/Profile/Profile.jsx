@@ -34,7 +34,6 @@ const Profile = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [editMode, setEdit] = useState(false);
   const [profile, setProfile] = useState({});
-
   useEffect(() => {
     getPatient(user.profileId)
       .then((data) => {

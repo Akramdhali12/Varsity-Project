@@ -10,6 +10,9 @@ import "../../../app.css"
 import { Avatar, Text } from "@mantine/core";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getdoctor } from "../../../Service/DoctorProfileService";
+import useProtectedImage from "../../Utility/Dropzone/useProtectedImage";
 
 const links = [
   {
@@ -31,6 +34,18 @@ const Sidebar = () => {
   const user = useSelector((state) => state.user);
   const location = useLocation(); // <-- Important for active detection
 
+  const [picId,setPicId] = useState(null);
+  useEffect(()=>{
+    if(!user) return;
+    getdoctor(user.profileId)
+    .then((data) => {
+      console.log("Patient:", data);
+      setPicId(data.profilePictureId);
+    })
+    .catch(console.log);
+  },[user]);
+  const url = useProtectedImage(picId);
+
   return (
     <div className="flex">
       <div className="w-64"></div>
@@ -45,7 +60,7 @@ const Sidebar = () => {
         <div className="flex flex-col mt-20 gap-8 items-center">
           <div className="flex flex-col gap-1 items-center">
             <div className="p-1 bg-white rounded-full shadow-lg">
-              <Avatar variant="filled" src="/profile.png" size="lg" alt="it's me" />
+              <Avatar variant="filled" src={url} size="lg" alt="it's me" />
             </div>
             <span className="font-medium text-white">{user.name}</span>
             <Text size="xs" c="dimmed" className="text-white">

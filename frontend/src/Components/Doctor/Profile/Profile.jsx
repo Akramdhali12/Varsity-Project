@@ -25,18 +25,8 @@ import {
   errorNotification,
   successNotification,
 } from "../../../Utility/NotificationUtil";
-
-// const doctor = {
-//   name: "Dr. Akram Hossain",
-//   email: "akram.hossain@example.com",
-//   dob: "1998-04-25",
-//   phone: "+8801789123456",
-//   address: "Dhaka, Bangladesh",
-//   licenseNo: "DOC-2025-12345",
-//   specialization: "Cardiologist",
-//   department: "Cardiology",
-//   totalExp: 5
-// };
+import { DropzoneButton } from "../../Utility/Dropzone/DropzoneButton";
+import useProtectedImage from "../../Utility/Dropzone/useProtectedImage";
 
 const Profile = () => {
   const user = useSelector((state) => state.user);
@@ -61,6 +51,7 @@ const Profile = () => {
       address: "",
       licenseNo: "",
       specialization: "",
+      profilePictureId: "",
       department: "",
       totalExp: [],
       startTime: "", // new field for start time
@@ -79,6 +70,7 @@ const Profile = () => {
     form.setValues({
       ...profile,
       dob: profile.dob ? new Date(profile.dob) : undefined,
+      profilePictureId: profile.profilePictureId
     });
     setEdit(true);
   };
@@ -101,6 +93,7 @@ const Profile = () => {
       });
   };
 
+  const url = useProtectedImage(profile.profilePictureId);
   return (
     <div className="p-10">
       <div className="flex justify-between items-center">
@@ -108,7 +101,7 @@ const Profile = () => {
           <div className="flex flex-col items-center gap-3">
             <Avatar
               variant="filled"
-              src="/profile.png"
+              src={url}
               size={120}
               alt="it's me"
             />
@@ -320,6 +313,7 @@ const Profile = () => {
         }
       >
         {/* Modal content */}
+        <DropzoneButton close={close} form={form} id="profilePictureId" />
       </Modal>
     </div>
   );

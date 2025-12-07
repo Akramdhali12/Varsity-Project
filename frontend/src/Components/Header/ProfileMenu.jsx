@@ -10,21 +10,37 @@ import {
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getUserProfile } from '../../Service/UserService';
+// import { getUserProfile } from '../../Service/UserService';
 import useProtectedImage from "../Utility/Dropzone/useProtectedImage";
+import { getPatient } from '../../Service/PatientProfileService';
+import { getdoctor } from '../../Service/DoctorProfileService';
 
 
 const ProfileMenu = () => {
   const user=useSelector((state)=>state.user);
   const [picId,setPicId] = useState(null);
+  console.log("User in profile menu:", user);
   useEffect(()=>{
     if(!user) return;
-    getUserProfile(user.id).then((data)=>{
-      setPicId(data);
-    }).catch((error)=>{
-      console.log(error);
-    })
-  },[]);
+    if (user.role === "PATIENT") {
+    getPatient(user.profileId)
+      .then((data) => {
+        console.log("Patient:", data);
+        setPicId(data.profilePictureId);
+      })
+      .catch(console.log);
+  } 
+  
+  else if (user.role === "DOCTOR") {
+    getdoctor(user.profileId)
+      .then((data) => {
+        console.log("Doctor:", data);
+        setPicId(data.profilePictureId);
+      })
+      .catch(console.log);
+  }
+    
+  },[user]);
   const url = useProtectedImage(picId);
   return (
     <Menu shadow="md" width={200}>
